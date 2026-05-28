@@ -1,0 +1,65 @@
+---
+title: "Revealjs Comic"
+subtitle: "Custom RevealJS Format"
+author: "Mickaël Canouil"
+date: today
+format:
+  revealjs-comic-revealjs: default
+---
+
+## Introduction
+
+This presentation demonstrates the revealjs-comic RevealJS format.
+
+The format applies custom styling and configuration.
+
+## Features
+
+The format provides:
+
+- Custom colour theme.
+- Typography adjustments.
+- Layout modifications.
+
+## Code Highlighting
+
+```javascript
+// JavaScript code is syntax highlighted
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+```
+
+## Lists
+
+::: {.incremental}
+- First point.
+- Second point.
+- Third point.
+:::
+
+## Two Columns
+
+:::: {.columns}
+::: {.column width="50%"}
+Left column content.
+:::
+
+::: {.column width="50%"}
+Right column content.
+:::
+::::
+
+## Speaker Notes
+
+Press 'S' to open speaker view.
+
+::: {.notes}
+These are speaker notes that only the presenter can see.
+:::
+
+## Conclusion
+
+The revealjs-comic format provides a customised RevealJS presentation.
+
+Questions?
