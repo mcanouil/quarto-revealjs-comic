@@ -32,7 +32,6 @@ $code-block-border-color: $comic-ink !default;
 
 /*-- scss:rules --*/
 
-// Shared comic primitives.
 $ink-border: 4px solid $comic-ink;
 $thick-ink-border: 6px solid $comic-ink;
 $panel-shadow: 6px 6px 0 0 $comic-ink;
@@ -43,14 +42,14 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   font-weight: 400;
   color: $comic-ink;
 
-  // Halftone Ben Day dots; reusable via the .halftone class.
+  // Halftone Ben Day dots; muted so text stays legible.
   %halftone-bg {
-    background-image:
-      radial-gradient($comic-ink 1.5px, transparent 1.6px),
-      radial-gradient($comic-ink 1.5px, transparent 1.6px);
-    background-size: 14px 14px;
-    background-position: 0 0, 7px 7px;
     background-color: $comic-paper;
+    background-image:
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px),
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px);
+    background-size: 22px 22px;
+    background-position: 0 0, 11px 11px;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -63,14 +62,12 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   h2, h3 { color: $comic-red; }
   h4, h5, h6 { color: $comic-blue; }
 
-  // Bold ink outlines on images.
   .slides section img {
     border: $thick-ink-border;
     box-shadow: $panel-shadow;
     background: $comic-white;
   }
 
-  // Code blocks styled as caption boxes.
   div.sourceCode,
   pre {
     border: $ink-border;
@@ -110,9 +107,9 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     h1.title {
       position: relative;
       z-index: 1;
-      font-size: 3.2em;
+      font-size: 2.6em;
       color: $comic-yellow;
-      text-shadow: 6px 6px 0 $comic-ink;
+      text-shadow: 5px 5px 0 $comic-ink;
       transform: rotate(-3deg);
     }
 
@@ -120,7 +117,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       position: relative;
       z-index: 1;
       font-family: "Permanent Marker", cursive;
-      font-size: 1.4em;
+      font-size: 1.2em;
       color: $comic-white;
       background: $comic-blue;
       display: inline-block;
@@ -150,23 +147,39 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     background-size: 140% 140%;
     background-position: center;
     background-repeat: no-repeat;
-    border: $thick-ink-border;
     text-align: center;
 
     h1, h2 {
-      font-size: 3em;
+      font-size: 2.4em;
       color: $comic-red;
-      text-shadow: 5px 5px 0 $comic-ink;
+      text-shadow: 4px 4px 0 $comic-ink;
       transform: rotate(-2deg);
     }
   }
 
   // ===== .panel =====
+  // Border drawn by a pseudo-element inset so the slide content stays
+  // inside Reveal.js' fixed dimensions and the border never crops at
+  // arbitrary aspect ratios.
   .slides section.panel {
-    background: $comic-white;
-    border: $thick-ink-border;
-    box-shadow: $panel-shadow;
-    padding: 1em 1.4em;
+    background: transparent;
+    box-sizing: border-box;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 1.5% 3%;
+      background: $comic-white;
+      border: $thick-ink-border;
+      box-shadow: $panel-shadow;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    > * {
+      position: relative;
+      z-index: 1;
+    }
 
     h1, h2 {
       display: inline-block;
@@ -175,7 +188,8 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       text-shadow: none;
       padding: 0.1em 0.5em;
       border: $ink-border;
-      font-size: 1.6em;
+      font-size: 1.4em;
+      margin-top: 0.4em;
     }
 
     .caption {
@@ -189,43 +203,58 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   }
 
   // ===== .action (BAM / POW / ZAP) =====
+  // Centre with flex and use a font-size that fits the slide bounds even
+  // after rotation. Use a moderate rotation so the rotated bounding box
+  // stays inside the slide.
   .slides section.action {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
     background:
-      radial-gradient(circle, $comic-yellow 0%, $comic-yellow 35%, $comic-red 36%, $comic-red 60%, transparent 70%),
+      radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, $comic-red 32%, $comic-red 55%, transparent 65%),
       $comic-paper;
-    background-size: 80% 80%;
+    background-size: 70% 70%;
     background-position: center;
     background-repeat: no-repeat;
-    text-align: center;
 
-    h1, h2, p, div.action {
+    h1, h2, p {
+      margin: 0;
+      line-height: 1;
       font-family: "Permanent Marker", cursive;
-      font-size: 4em;
+      font-size: 3em;
       color: $comic-yellow;
+      letter-spacing: 0.04em;
+      transform: rotate(-4deg);
       text-shadow:
-        4px 0 0 $comic-ink,
-        -4px 0 0 $comic-ink,
-        0 4px 0 $comic-ink,
-        0 -4px 0 $comic-ink,
-        6px 6px 0 $comic-red;
-      transform: rotate(-6deg);
-      letter-spacing: 0.05em;
+        3px 0 0 $comic-ink,
+        -3px 0 0 $comic-ink,
+        0 3px 0 $comic-ink,
+        0 -3px 0 $comic-ink,
+        5px 5px 0 $comic-red;
     }
   }
 
-  // Inline action callout emitted by the bam shortcode.
+  // ===== Inline action callout emitted by the bam shortcode =====
+  // Supports inline positioning via the shortcode kwargs (top/right/bottom/
+  // left/rotate). When position kwargs are present, the shortcode sets
+  // inline `position: absolute` so the callout floats over the slide.
   div.action-callout {
     display: inline-block;
     font-family: "Permanent Marker", cursive;
-    font-size: 2.4em;
-    padding: 0.2em 0.6em;
+    font-size: 2.2em;
+    line-height: 1;
+    padding: 0.1em 0.5em;
     transform: rotate(-4deg);
     text-shadow:
       3px 0 0 $comic-ink,
       -3px 0 0 $comic-ink,
       0 3px 0 $comic-ink,
       0 -3px 0 $comic-ink,
-      5px 5px 0 rgba(0, 0, 0, 0.4);
+      4px 4px 0 rgba(0, 0, 0, 0.4);
+    z-index: 5;
   }
 
   div.action-callout.action-yellow { color: $comic-yellow; }
@@ -233,11 +262,9 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   div.action-callout.action-blue   { color: $comic-blue; }
 
   // ===== .speech =====
-  // Two paths:
-  //  (a) A whole slide with {.speech} on the heading: the slide is rendered
-  //      as a giant speech bubble via ::before/::after pseudo-elements.
-  //  (b) A :::{.speech} fenced div inside any slide: the Lua filter wraps
-  //      its content in a .speech-bubble div and appends an SVG tail.
+  // Slide-level: pseudo-elements draw the bubble + CSS-triangle tail.
+  // Div-level: the Lua filter wraps :::{.speech} content in .speech-bubble
+  // and the ::after triangle below provides the tail.
   .slides section.speech {
     background: $comic-paper;
     text-align: center;
@@ -248,7 +275,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       top: 8%;
       left: 6%;
       right: 6%;
-      bottom: 18%;
+      bottom: 22%;
       background: $comic-white;
       border: $thick-ink-border;
       border-radius: 50px;
@@ -259,14 +286,14 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     &::after {
       content: "";
       position: absolute;
-      bottom: 10%;
+      bottom: 14%;
       left: 24%;
       width: 0;
       height: 0;
-      border-left: 30px solid transparent;
-      border-right: 30px solid transparent;
-      border-top: 50px solid $comic-white;
-      filter: drop-shadow(0 6px 0 $comic-ink);
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 30px solid $comic-white;
+      filter: drop-shadow(0 4px 0 $comic-ink);
       z-index: 0;
     }
 
@@ -278,50 +305,59 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       color: $comic-ink;
       text-shadow: none;
     }
-
-    .speech-bubble {
-      position: relative;
-      display: inline-block;
-      background: $comic-white;
-      color: $comic-ink;
-      border: $thick-ink-border;
-      border-radius: 40px;
-      padding: 1em 1.4em;
-      font-family: "Comic Neue", cursive;
-      font-weight: 700;
-      font-size: 1.6em;
-      box-shadow: $panel-shadow;
-      max-width: 80%;
-      z-index: 1;
-    }
-
-    svg.speech-tail {
-      position: absolute;
-      bottom: -32px;
-      left: 30%;
-      width: 60px;
-      height: 60px;
-    }
   }
 
-  // .speech div used outside of a section.speech slide.
+  // Div-level speech bubble (works in any slide, including section.speech).
   .slides .speech-bubble {
     position: relative;
     display: inline-block;
     background: $comic-white;
     color: $comic-ink;
     border: $thick-ink-border;
-    border-radius: 40px;
-    padding: 1em 1.4em;
+    border-radius: 32px;
+    padding: 0.8em 1.2em;
     font-family: "Comic Neue", cursive;
     font-weight: 700;
-    font-size: 1.4em;
+    font-size: 1.3em;
     box-shadow: $panel-shadow;
     max-width: 80%;
+    z-index: 1;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -22px;
+      left: 28%;
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 22px solid $comic-white;
+      filter: drop-shadow(0 4px 0 $comic-ink);
+    }
   }
 
   // ===== .halftone modifier (composable) =====
+  // Keep text legible by giving textual content a paper-coloured chip
+  // backdrop. Headings get an inline yellow box; body text gets a
+  // semi-opaque paper backdrop.
   .slides section.halftone {
     @extend %halftone-bg;
+
+    h1, h2, h3, h4, h5, h6 {
+      background: $comic-yellow;
+      color: $comic-ink;
+      text-shadow: none;
+      display: inline-block;
+      padding: 0.1em 0.4em;
+      border: $ink-border;
+      box-shadow: 4px 4px 0 $comic-ink;
+    }
+
+    p, ul, ol, blockquote, pre, div.sourceCode {
+      background: rgba(253, 246, 227, 0.92);
+      padding: 0.3em 0.6em;
+      border-radius: 4px;
+    }
   }
 }

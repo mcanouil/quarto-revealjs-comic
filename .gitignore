@@ -9,3 +9,5 @@ docs/api/*.qmd
 *.html
 template_files/
 .quarto/
+
+/.luarc.json

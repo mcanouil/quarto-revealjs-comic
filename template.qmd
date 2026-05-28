@@ -25,9 +25,11 @@ Meanwhile, in the city...
 
 POW!
 
-## {.action}
+## Mixed slide with floating bam
 
-{{< bam "ZAP!" colour=blue >}}
+Plain slide content.
+
+{{< bam "ZAP!" colour=blue top=20% right=10% rotate=15 size=3em >}}
 
 ## Hero says... {.speech}
 
