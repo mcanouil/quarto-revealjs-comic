@@ -1,0 +1,14 @@
+title: Comic Reveal.js Theme
+author: Mickaël Canouil
+version: 0.0.0
+quarto-required: ">=1.6"
+contributes:
+  shortcodes:
+    - bam.lua
+  formats:
+    revealjs:
+      theme: comic.scss
+      filters:
+        - comic.lua
+      logo: comic.svg
+      slide-number: c

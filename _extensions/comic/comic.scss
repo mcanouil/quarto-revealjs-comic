@@ -1,0 +1,327 @@
+/*-- scss:defaults --*/
+
+@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Comic+Neue:wght@400;700&display=swap");
+
+// Comic palette.
+$comic-paper: #fdf6e3 !default;
+$comic-ink: #0b0b0b !default;
+$comic-red: #e63946 !default;
+$comic-yellow: #ffd60a !default;
+$comic-blue: #1d4ed8 !default;
+$comic-white: #ffffff !default;
+
+// Reveal.js variables.
+$body-bg: $comic-paper !default;
+$body-color: $comic-ink !default;
+$link-color: $comic-red !default;
+$link-color-hover: lighten($comic-red, 10%) !default;
+$selection-bg: $comic-yellow !default;
+$selection-color: $comic-ink !default;
+
+$presentation-font-size-root: 32px !default;
+$presentation-heading-font: "Bangers", "Impact", sans-serif !default;
+$presentation-heading-color: $comic-ink !default;
+$presentation-heading-font-weight: 400 !default;
+$presentation-heading-line-height: 1.1 !default;
+$presentation-heading-letter-spacing: 0.04em !default;
+$font-family-sans-serif: "Comic Neue", "Comic Sans MS", "Trebuchet MS", sans-serif !default;
+$font-family-monospace: "JetBrains Mono", "Fira Code", monospace !default;
+
+$code-block-bg: $comic-white !default;
+$code-block-border-color: $comic-ink !default;
+
+/*-- scss:rules --*/
+
+// Shared comic primitives.
+$ink-border: 4px solid $comic-ink;
+$thick-ink-border: 6px solid $comic-ink;
+$panel-shadow: 6px 6px 0 0 $comic-ink;
+$starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, transparent 70%);
+
+.reveal {
+  font-family: $font-family-sans-serif;
+  font-weight: 400;
+  color: $comic-ink;
+
+  // Halftone Ben Day dots; reusable via the .halftone class.
+  %halftone-bg {
+    background-image:
+      radial-gradient($comic-ink 1.5px, transparent 1.6px),
+      radial-gradient($comic-ink 1.5px, transparent 1.6px);
+    background-size: 14px 14px;
+    background-position: 0 0, 7px 7px;
+    background-color: $comic-paper;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $presentation-heading-font;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 0 $comic-ink;
+    color: $comic-yellow;
+  }
+
+  h2, h3 { color: $comic-red; }
+  h4, h5, h6 { color: $comic-blue; }
+
+  // Bold ink outlines on images.
+  .slides section img {
+    border: $thick-ink-border;
+    box-shadow: $panel-shadow;
+    background: $comic-white;
+  }
+
+  // Code blocks styled as caption boxes.
+  div.sourceCode,
+  pre {
+    border: $ink-border;
+    border-radius: 0;
+    box-shadow: $panel-shadow;
+    background: $comic-white !important;
+  }
+
+  code {
+    background: $comic-yellow;
+    color: $comic-ink;
+    padding: 0 0.2em;
+    border-radius: 2px;
+  }
+
+  .fragment.highlight-current-red.current-fragment { color: $comic-red; }
+  .fragment.highlight-current-blue.current-fragment { color: $comic-blue; }
+
+  // ===== .title-slide =====
+  .slides section.title-slide {
+    @extend %halftone-bg;
+    text-align: left;
+    padding: 0 6%;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -10%;
+      width: 80%;
+      height: 100%;
+      background: $comic-red;
+      transform: skewX(-12deg);
+      z-index: 0;
+    }
+
+    h1.title {
+      position: relative;
+      z-index: 1;
+      font-size: 3.2em;
+      color: $comic-yellow;
+      text-shadow: 6px 6px 0 $comic-ink;
+      transform: rotate(-3deg);
+    }
+
+    p.subtitle {
+      position: relative;
+      z-index: 1;
+      font-family: "Permanent Marker", cursive;
+      font-size: 1.4em;
+      color: $comic-white;
+      background: $comic-blue;
+      display: inline-block;
+      padding: 0.2em 0.6em;
+      border: $ink-border;
+      box-shadow: $panel-shadow;
+    }
+
+    .author,
+    .quarto-title-author-name,
+    .date {
+      position: relative;
+      z-index: 1;
+      font-family: "Permanent Marker", cursive;
+      color: $comic-ink;
+      background: $comic-yellow;
+      display: inline-block;
+      padding: 0.1em 0.5em;
+      border: $ink-border;
+      margin-top: 0.4em;
+    }
+  }
+
+  // ===== .section (chapter splash) =====
+  .slides section.section {
+    background: $starburst-yellow, $comic-paper;
+    background-size: 140% 140%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: $thick-ink-border;
+    text-align: center;
+
+    h1, h2 {
+      font-size: 3em;
+      color: $comic-red;
+      text-shadow: 5px 5px 0 $comic-ink;
+      transform: rotate(-2deg);
+    }
+  }
+
+  // ===== .panel =====
+  .slides section.panel {
+    background: $comic-white;
+    border: $thick-ink-border;
+    box-shadow: $panel-shadow;
+    padding: 1em 1.4em;
+
+    h1, h2 {
+      display: inline-block;
+      background: $comic-yellow;
+      color: $comic-ink;
+      text-shadow: none;
+      padding: 0.1em 0.5em;
+      border: $ink-border;
+      font-size: 1.6em;
+    }
+
+    .caption {
+      background: $comic-yellow;
+      color: $comic-ink;
+      border: $ink-border;
+      padding: 0.2em 0.6em;
+      display: inline-block;
+      font-family: "Permanent Marker", cursive;
+    }
+  }
+
+  // ===== .action (BAM / POW / ZAP) =====
+  .slides section.action {
+    background:
+      radial-gradient(circle, $comic-yellow 0%, $comic-yellow 35%, $comic-red 36%, $comic-red 60%, transparent 70%),
+      $comic-paper;
+    background-size: 80% 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-align: center;
+
+    h1, h2, p, div.action {
+      font-family: "Permanent Marker", cursive;
+      font-size: 4em;
+      color: $comic-yellow;
+      text-shadow:
+        4px 0 0 $comic-ink,
+        -4px 0 0 $comic-ink,
+        0 4px 0 $comic-ink,
+        0 -4px 0 $comic-ink,
+        6px 6px 0 $comic-red;
+      transform: rotate(-6deg);
+      letter-spacing: 0.05em;
+    }
+  }
+
+  // Inline action callout emitted by the bam shortcode.
+  div.action-callout {
+    display: inline-block;
+    font-family: "Permanent Marker", cursive;
+    font-size: 2.4em;
+    padding: 0.2em 0.6em;
+    transform: rotate(-4deg);
+    text-shadow:
+      3px 0 0 $comic-ink,
+      -3px 0 0 $comic-ink,
+      0 3px 0 $comic-ink,
+      0 -3px 0 $comic-ink,
+      5px 5px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  div.action-callout.action-yellow { color: $comic-yellow; }
+  div.action-callout.action-red    { color: $comic-red; }
+  div.action-callout.action-blue   { color: $comic-blue; }
+
+  // ===== .speech =====
+  // Two paths:
+  //  (a) A whole slide with {.speech} on the heading: the slide is rendered
+  //      as a giant speech bubble via ::before/::after pseudo-elements.
+  //  (b) A :::{.speech} fenced div inside any slide: the Lua filter wraps
+  //      its content in a .speech-bubble div and appends an SVG tail.
+  .slides section.speech {
+    background: $comic-paper;
+    text-align: center;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 8%;
+      left: 6%;
+      right: 6%;
+      bottom: 18%;
+      background: $comic-white;
+      border: $thick-ink-border;
+      border-radius: 50px;
+      box-shadow: $panel-shadow;
+      z-index: 0;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 10%;
+      left: 24%;
+      width: 0;
+      height: 0;
+      border-left: 30px solid transparent;
+      border-right: 30px solid transparent;
+      border-top: 50px solid $comic-white;
+      filter: drop-shadow(0 6px 0 $comic-ink);
+      z-index: 0;
+    }
+
+    h1, h2, h3, p, ul, ol {
+      position: relative;
+      z-index: 1;
+      font-family: "Comic Neue", cursive;
+      font-weight: 700;
+      color: $comic-ink;
+      text-shadow: none;
+    }
+
+    .speech-bubble {
+      position: relative;
+      display: inline-block;
+      background: $comic-white;
+      color: $comic-ink;
+      border: $thick-ink-border;
+      border-radius: 40px;
+      padding: 1em 1.4em;
+      font-family: "Comic Neue", cursive;
+      font-weight: 700;
+      font-size: 1.6em;
+      box-shadow: $panel-shadow;
+      max-width: 80%;
+      z-index: 1;
+    }
+
+    svg.speech-tail {
+      position: absolute;
+      bottom: -32px;
+      left: 30%;
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  // .speech div used outside of a section.speech slide.
+  .slides .speech-bubble {
+    position: relative;
+    display: inline-block;
+    background: $comic-white;
+    color: $comic-ink;
+    border: $thick-ink-border;
+    border-radius: 40px;
+    padding: 1em 1.4em;
+    font-family: "Comic Neue", cursive;
+    font-weight: 700;
+    font-size: 1.4em;
+    box-shadow: $panel-shadow;
+    max-width: 80%;
+  }
+
+  // ===== .halftone modifier (composable) =====
+  .slides section.halftone {
+    @extend %halftone-bg;
+  }
+}

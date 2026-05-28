@@ -1,11 +1,13 @@
 cff-version: 1.2.0
-title: "Revealjs Comic Extension for Quarto"
+title: "Comic Reveal.js Theme for Quarto"
 message: "If you use this project, please cite it as below."
 type: software
 authors:
-  - name: "Mickaël Canouil"
+  - family-names: "Canouil"
+    given-names: "Mickaël"
+    orcid: "https://orcid.org/0000-0002-3396-4549"
 repository-code: "https://github.com/mcanouil/quarto-revealjs-comic"
-url: "https://mcanouil.github.io/quarto-revealjs-comic/"
+url: "https://m.canouil.dev/quarto-revealjs-comic/"
 license: "MIT License"
 date-released: "2026-05-28"
 version: 0.0.0

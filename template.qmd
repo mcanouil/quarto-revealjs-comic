@@ -1,65 +1,73 @@
 ---
-title: "Revealjs Comic"
-subtitle: "Custom RevealJS Format"
+title: "Caped Crusader"
+subtitle: "A comic-book talk"
 author: "Mickaël Canouil"
 date: today
 format:
-  revealjs-comic-revealjs: default
+  comic-revealjs: default
 ---
 
-## Introduction
+## Chapter 1: The Setup {.section}
 
-This presentation demonstrates the revealjs-comic RevealJS format.
+A new chapter begins.
 
-The format applies custom styling and configuration.
+## A Single Panel {.panel}
 
-## Features
+- Paper background.
+- Bold ink border.
+- Caption sits in a yellow box.
 
-The format provides:
+::: {.caption}
+Meanwhile, in the city...
+:::
 
-- Custom colour theme.
-- Typography adjustments.
-- Layout modifications.
+## {.action}
 
-## Code Highlighting
+POW!
 
-```javascript
-// JavaScript code is syntax highlighted
-function greet(name) {
-  return `Hello, ${name}!`;
+## {.action}
+
+{{< bam "ZAP!" colour=blue >}}
+
+## Hero says... {.speech}
+
+With great Quarto comes great responsibility.
+
+## Mixed slide
+
+Plain content above the bubble.
+
+::: {.speech}
+Inline speech bubble inside a normal slide.
+:::
+
+## Plain Slide {.halftone}
+
+This slide uses only the `.halftone` modifier on a standard slide.
+
+It composes with any other styles.
+
+## Code Highlighting {.panel}
+
+```r
+greet <- function(name) {
+  paste0("Hello, ", name, "!")
 }
 ```
 
-## Lists
-
-::: {.incremental}
-- First point.
-- Second point.
-- Third point.
-:::
-
 ## Two Columns
 
-:::: {.columns}
+::: {.columns}
 ::: {.column width="50%"}
 Left column content.
 :::
-
 ::: {.column width="50%"}
 Right column content.
 :::
-::::
-
-## Speaker Notes
-
-Press 'S' to open speaker view.
-
-::: {.notes}
-These are speaker notes that only the presenter can see.
 :::
 
-## Conclusion
+## Plain Default Slide
 
-The revealjs-comic format provides a customised RevealJS presentation.
+Slides without a class fall back to default Reveal.js styling.
 
-Questions?
+This is a regression check.

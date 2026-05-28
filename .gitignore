@@ -1,3 +1,5 @@
+.DS_Store
+.luarc.json
 _site/
 docs/_site/
 docs/_variables.yml
@@ -5,4 +7,5 @@ docs/_changelog-content.md
 docs/_sidebar-api.yml
 docs/api/*.qmd
 *.html
+template_files/
 .quarto/

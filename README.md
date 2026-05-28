@@ -1,20 +1,7 @@
-<!--
-AGENT GUIDELINES:
-This README is the primary documentation for the extension.
-Update placeholder content with actual extension details.
+# Comic Reveal.js Theme
 
-Required updates:
-1. Replace %%placeholders%% with actual values.
-2. Write a clear description explaining what the format provides.
-3. Document all format options in the Configuration table.
-4. Document any included RevealJS plugins.
-5. Add rendered output links to the Example section.
-6. Update or remove the Acknowledgements section.
--->
-
-# Revealjs Comic
-
-A Quarto extension.
+A Quarto Reveal.js format that styles slides as a super-hero comic book.
+Authors opt into distinct visuals (cover splash, section splash, single panel, action callout, speech bubble, halftone background) by adding a class to the slide heading.
 
 ## Installation
 
@@ -27,38 +14,60 @@ If you are using version control, you will want to check in this directory.
 
 ## Usage
 
-Use the format in your presentation YAML:
+Pick the format in your presentation YAML:
 
 ```yaml
-format:
-  revealjs-comic-revealjs: default
+---
+title: "Caped Crusader"
+format: comic-revealjs
+---
 ```
 
-With options:
+### Slide classes
 
-```yaml
-format:
-  revealjs-comic-revealjs:
-    transition: slide
+| Class          | Effect                                                                     |
+| -------------- | -------------------------------------------------------------------------- |
+| `.title-slide` | Auto-applied to the cover slide; diagonal red block, halftone overlay.     |
+| `.section`     | Chapter splash with starburst background.                                  |
+| `.panel`       | Single comic panel: paper background, bold ink border, drop shadow.        |
+| `.action`      | BAM/POW/ZAP-style action slide: skewed display text on a burst background. |
+| `.speech`      | Speech bubble; an SVG tail is injected automatically by the filter.        |
+| `.halftone`    | Ben Day dots background modifier; composable with any other class.        |
+
+Apply a class to a slide by appending it to the heading:
+
+```markdown
+## Chapter 1: The Setup {.section}
+
+## A Single Panel {.panel}
+
+## {.action}
+POW!
+
+## Hero says... {.speech}
+With great Quarto comes great responsibility.
 ```
 
-## Configuration
+### `bam` shortcode
 
-### Format Options
+For inline action callouts inside any slide:
 
-<!-- TODO: Document all format options -->
+```markdown
+{{< bam "ZAP!" colour=blue >}}
+```
 
-| Option       | Type   | Default   | Description              |
-| ------------ | ------ | --------- | ------------------------ |
-| `transition` | string | `"slide"` | Slide transition effect. |
+Available colours: `yellow` (default), `red`, `blue`.
 
 ## Example
 
-Here is the source code for a minimal example: [template.qmd](template.qmd).
+Source: [template.qmd](template.qmd).
+Rendered output: [HTML](https://m.canouil.dev/quarto-revealjs-comic/).
 
-<!-- TODO: Add rendered output links -->
+## Author
 
-Rendered output:
+Mickaël Canouil, _Ph.D._ ([https://mickael.canouil.fr](https://mickael.canouil.fr), [ORCID](https://orcid.org/0000-0002-3396-4549)).
 
-- [HTML](https://m.canouil.dev/quarto-revealjs-comic/).
+## Acknowledgements
 
+Built on top of the Reveal.js engine shipped with Quarto.
+Web fonts served by Google Fonts: Bangers, Permanent Marker, Comic Neue.
