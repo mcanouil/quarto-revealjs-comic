@@ -1,0 +1,62 @@
+{
+  "Action callout (bam)": {
+    "prefix": "bam",
+    "body": ["{{< bam \"${1:BAM!}\" colour=${2|yellow,red,blue|} >}}"],
+    "description": "Insert an inline action callout (skewed comic burst)."
+  },
+  "Explosion callout (boom)": {
+    "prefix": "boom",
+    "body": ["{{< boom \"${1:BOOM!}\" colour=${2|red,yellow,blue|} >}}"],
+    "description": "Insert an inline explosion callout (jagged star-burst)."
+  },
+  "Speech bubble": {
+    "prefix": "speech",
+    "body": ["::: {.speech}", "$0", ":::"],
+    "description": "Wrap content in a speech bubble."
+  },
+  "Thought bubble": {
+    "prefix": "thought",
+    "body": ["::: {.thought}", "$0", ":::"],
+    "description": "Wrap content in a thought bubble."
+  },
+  "Shout bubble": {
+    "prefix": "shout",
+    "body": ["::: {.shout}", "$0", ":::"],
+    "description": "Wrap content in a shout bubble."
+  },
+  "Whisper bubble": {
+    "prefix": "whisper",
+    "body": ["::: {.whisper}", "$0", ":::"],
+    "description": "Wrap content in a whisper bubble."
+  },
+  "Narration box": {
+    "prefix": "narration",
+    "body": ["::: {.narration}", "$0", ":::"],
+    "description": "Wrap content in a narration box."
+  },
+  "Section splash slide": {
+    "prefix": "section",
+    "body": ["## ${1:Chapter 1}: ${2:Title} {.section}", "", "$0"],
+    "description": "Add a chapter splash slide; the heading is split on the first colon into a banner and title."
+  },
+  "Panel slide": {
+    "prefix": "panel",
+    "body": ["## ${1:Title} {.panel}", "", "$0"],
+    "description": "Add a single bordered comic panel slide."
+  },
+  "Action stage slide": {
+    "prefix": "action",
+    "body": ["## ${1:Title} {.action}", "", "$0"],
+    "description": "Add an action stage slide with centred content."
+  },
+  "Explosion stage slide": {
+    "prefix": "explosion",
+    "body": ["## ${1:Title} {.explosion}", "", "$0"],
+    "description": "Add an explosion stage slide with centred content."
+  },
+  "Speech stage slide": {
+    "prefix": "speech-slide",
+    "body": ["## ${1:Title} {.speech}", "", "$0"],
+    "description": "Add a speech-bubble stage slide."
+  }
+}
