@@ -1,75 +1,216 @@
 ---
 title: "Caped Crusader"
-subtitle: "A comic-book talk"
+subtitle: "Issue 01: The Signal"
 author: "Mickaël Canouil"
 date: today
+references:
+  - id: canouil_jointly_2018
+    author:
+      - family: Canouil
+        given: Mickaël
+      - family: Balkau
+        given: Beverley
+      - family: Roussel
+        given: Ronan
+      - family: Froguel
+        given: Philippe
+      - family: Rocheleau
+        given: Ghislain
+    container-title: Frontiers in Genetics
+    doi: 10.3389/fgene.2018.00210
+    issued: 2018
+    title: "Jointly Modelling Single Nucleotide Polymorphisms With
+      Longitudinal and Time-to-Event Trait: An Application to Type 2
+      Diabetes and Fasting Plasma Glucose"
+    type: article-journal
+    journal-title: "Frontiers in Genetics"
 format:
   comic-revealjs: default
 ---
 
-## Chapter 1: The Setup {.section}
+# Issue 01: The Signal {.section}
 
-A new chapter begins.
+A new case lights up the night sky.
 
-## A Single Panel {.panel}
+## Cover {.panel}
 
-- Paper background.
-- Bold ink border.
-- Caption sits in a yellow box.
+::: {#fig-signal fig-alt="A spotlight beam projecting a bat-like signal into a night sky above a city skyline."}
+
+{{< placeholder 600 400 >}}
+
+Signal projection over the skyline.
+
+:::
+
+The signal in @fig-signal calls our hero into action.
+
+## Briefing {.panel}
+
+Mission objectives, decoded from dispatch.
+
+- [Locate the source of the broadcast.]{.fragment .comic-pop}
+- [Question every witness on the rooftop.]{.fragment .comic-pop}
+- [Recover the stolen circuitry before sunrise.]{.fragment .comic-pop}
+- [Avoid the press at all costs.]{.fragment .comic-pop}
 
 ::: {.caption}
-Meanwhile, in the city...
+Briefing read at 23:47.
 :::
 
-## {.action}
+## Detective Board {.panel}
 
-POW!
-
-## Mixed slide with floating bam
-
-Plain slide content.
-
-{{< bam "ZAP!" colour=blue top=20% right=10% rotate=15 size=3em >}}
-
-## Hero says... {.speech}
-
-With great Quarto comes great responsibility.
-
-## Mixed slide
-
-Plain content above the bubble.
-
-::: {.speech}
-Inline speech bubble inside a normal slide.
+::: {layout-ncol=2 layout-valign="center"}
+::: {.callout-note collapse="false" title="What we know"}
+The signal repeats every 11 minutes.
+The pattern matches no known broadcast.
 :::
 
-## Plain Slide {.halftone}
+::: {.callout-tip collapse="false" title="What to try"}
+Triangulate from the three nearest towers.
+Compare with last week's interference report.
+:::
+:::
 
-This slide uses only the `.halftone` modifier on a standard slide.
+## Incident Summary {.panel}
 
-It composes with any other styles.
+| District | Alerts | Resolved | Priority |
+|---|---:|---:|---|
+| Old Town | 14 | 11 | Medium |
+| Dockside | 9 | 5 | High |
+| Midtown | 7 | 7 | Low |
 
-## Code Highlighting {.panel}
+: Dispatch incident summary. {#tbl-incidents}
+
+Table @tbl-incidents shows where to focus tonight.
+
+# Issue 02: The Investigation {.section}
+
+## Investigator's Notes {.panel}
+
+::: {.panel-tabset}
+#### Narrative
+
+[The hero arrives at the rooftop while the city still glows.]{.fragment .halftone-wipe}
+
+[Three witnesses are waiting in the cold.]{.fragment .halftone-wipe}
+
+#### Evidence
+
+| Item | Source | Status |
+|---|---|---|
+| Burnt circuitry | Old Town alley | Bagged. |
+| Audio fragment | Dispatch tape | Decoded. |
+| Footprint cast | Rooftop edge | Pending. |
+
+#### Code
 
 ```r
-greet <- function(name) {
-  paste0("Hello, ", name, "!")
-}
+city <- c("Gotham", "Metropolis", "Star City")
+paste("Patrol active in", city)
 ```
+:::
 
-## Two Columns
+## Witness Statement {.speech}
+
+I saw a flash, and then nothing.
+
+## Inner Monologue
+
+::: {.thought}
+If the signal repeats every 11 minutes, the next pulse is in 3.
+:::
+
+The hero counts the seconds.
+
+## Out of Nowhere... {.action}
+
+ZAP!
+
+{{< bam "POW!" colour=red top=35% right=8% rotate=12 size=2.6em fragment=burst index=1 >}}
+
+{{< bam "WHAM!" colour=blue top=58% left=10% rotate=-8 size=2em fragment=pop index=2 >}}
+
+## "Stop right there!"
+
+::: {.shout}
+Stop right there!
+:::
+
+The rooftop falls silent.
+
+## City At Night {.halftone}
+
+[The neon hum dims below the clouds.]{.fragment .ink-splat}
+
+[Somewhere, a clock tower chimes once.]{.fragment .ink-splat}
+
+## Showdown {.panel .halftone}
+
+The hero faces the [unknown broadcaster]{.fragment .zap-highlight} on the rooftop.
+
+The signal pulses one more time.
+
+## {.explosion}
+
+KA-BOOM!
+
+{{< boom "BLAM!" colour=yellow top=62% left=8% rotate=-14 size=1.6em >}}
+
+## Aftermath {.panel}
+
+::: {.narration}
+Three minutes later, the city is quiet again.
+The press is already on its way.
+:::
 
 ::: {.columns}
 ::: {.column width="50%"}
-Left column content.
+**Heroes.**
+
+- Hero secured the rooftop.
+- Witnesses gave their statements.
+- Circuitry recovered intact.
+:::
+
+::: {.column width="50%"}
+**Villains.**
+
+- One escaped into the alleys.
+- Identity still unknown.
+- Pattern logged for next time.
+:::
+:::
+
+## "Until next time..." {.speech}
+
+::: {.whisper}
+Until next time.
+:::
+
+The hero disappears over the rooftop edge.
+
+## Two Columns {.panel}
+
+::: {.columns}
+::: {.column width="50%"}
+Left column reads as its own sub-panel.
 :::
 ::: {.column width="50%"}
-Right column content.
+Right column matches its sibling's height.
 :::
 :::
 
-## Plain Default Slide
+## Evidence Notes and Citations {.panel}
 
-Slides without a class fall back to default Reveal.js styling.
+Comic scholarship can still be rigorous [@canouil_jointly_2018].
 
-This is a regression check.
+The signal pattern echoes earlier findings on jointly modelled longitudinal traits.
+
+# Issue 01-02: End of Issue {.section}
+
+To be continued in ...
+
+## References {.panel .scrollable}
+
+::: {#refs}
+:::

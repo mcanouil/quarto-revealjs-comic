@@ -10,6 +10,7 @@ $schema: https://m.canouil.dev/quarto-wizard/assets/schema/v2/extension-schema.j
 #   - .panel        (single comic panel)
 #   - .action       (BAM / POW / ZAP slide)
 #   - .speech       (speech bubble; SVG tail injected by the filter)
+#   - .character    (CSS hero avatar + Markdown bubble; pose / state / bubble attrs)
 #   - .halftone     (Ben Day dots modifier; composable)
 formats:
   comic-revealjs: {}
