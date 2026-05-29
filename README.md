@@ -1,4 +1,4 @@
-# Comic Reveal.js Theme
+# Reveal.js Comic Format For Quarto
 
 A Quarto Reveal.js format that styles slides as a super-hero comic book.
 Authors opt into distinct visuals (cover splash, section splash, single panel, action callout, speech bubble, halftone background) by adding a class to the slide heading.
@@ -11,6 +11,14 @@ quarto add mcanouil/quarto-revealjs-comic
 
 This will install the extension under the `_extensions` subdirectory.
 If you are using version control, you will want to check in this directory.
+
+Alternatively, start a new presentation from the bundled template:
+
+```bash
+quarto use template mcanouil/quarto-revealjs-comic
+```
+
+This installs the extension and seeds the project with a ready-to-edit `template.qmd`.
 
 ## Usage
 
@@ -25,15 +33,15 @@ format: comic-revealjs
 
 ### Slide classes
 
-| Class | Effect |
-| --- | --- |
-| `.title-slide` | Auto-applied to the cover slide; diagonal red block, halftone overlay. |
-| `.section` | Chapter splash with starburst background. |
-| `.panel` | Single comic panel: paper background, bold ink border, drop shadow. |
-| `.action` | BAM/POW/ZAP-style action slide: skewed display text on a burst background. |
-| `.speech` | Speech bubble; an SVG tail is injected automatically by the filter. |
-| `.character` | CSS-drawn caped hero beside a Markdown bubble (see below). |
-| `.halftone` | Ben Day dots background modifier; composable with any other class. |
+| Class          | Effect                                                                                                         |
+| -------------- | -------------------------------------------------------------------------------------------------------------- |
+| `.title-slide` | Auto-applied to the cover slide; diagonal red block, halftone overlay.                                         |
+| `.section`     | Chapter splash with starburst background; a `Banner: Title` heading splits into a banner chip above the title. |
+| `.panel`       | Single comic panel: paper background, bold ink border, drop shadow.                                            |
+| `.action`      | BAM/POW/ZAP-style action slide: skewed display text on a burst background.                                     |
+| `.explosion`   | Explosion splash: jagged star burst behind centred display text.                                               |
+| `.speech`      | Speech-bubble slide; an SVG tail is injected automatically by the filter. Also works as a div (see below).     |
+| `.halftone`    | Ben Day dots background modifier; composable with any other class.                                             |
 
 Apply a class to a slide by appending it to the heading:
 
@@ -43,38 +51,83 @@ Apply a class to a slide by appending it to the heading:
 ## A Single Panel {.panel}
 
 ## {.action}
+
 POW!
 
 ## Hero says... {.speech}
+
 With great Quarto comes great responsibility.
 ```
 
-### `.character` div
+### Bubble divs
 
-Put a CSS-drawn caped hero on the slide with a Markdown-filled bubble.
-The div body is the dialogue, so emphasis, links, and lists all work:
+Drop a styled bubble anywhere inside a slide by wrapping Markdown in a div.
+The filter paints each variant with its own shape and border; the body is
+ordinary Markdown, so emphasis, links, and lists all work:
 
 ```markdown
-::: {.character}
-I saw a flash, and then **nothing**.
+::: {.speech}
+Use me when a character speaks mid-panel.
 :::
 
-::: {.character pose="right" bubble="thought"}
-The next pulse is in three minutes.
+::: {.thought}
+If the signal repeats every 11 minutes, the next pulse is in 3.
 :::
 
-::: {.character state="action" bubble="shout"}
+::: {.shout}
 Stop right there!
+:::
+
+::: {.whisper}
+Until next time.
+:::
+
+::: {.narration}
+Three minutes later, the city is quiet again.
 :::
 ```
 
-Attributes (all optional):
+| Class        | Bubble                                 |
+| ------------ | -------------------------------------- |
+| `.speech`    | Rounded speech bubble with a tail.     |
+| `.thought`   | Cloud-style thought bubble.            |
+| `.shout`     | Spiky shout bubble for raised voices.  |
+| `.whisper`   | Soft dashed bubble for quiet asides.   |
+| `.narration` | Rectangular caption box for narration. |
 
-| Attribute | Values | Default | Effect |
-| --- | --- | --- | --- |
-| `pose` | `left`, `right` | `left` | Which side the hero stands; the bubble sits opposite and points back. |
-| `state` | `talk`, `action` | `talk` | `action` tilts the hero into a lunge and adds speed lines. |
-| `bubble` | `speech`, `thought`, `shout`, `whisper` | `speech` | Reuses the matching bubble variant to style the dialogue. |
+### Fragment entrances
+
+Comic-themed entrances for any [reveal.js fragment](https://quarto.org/docs/presentations/revealjs/advanced.html#fragments).
+Combine `.fragment` with one of the helper classes on a span, list item, or div:
+
+| Class            | Entrance                             |
+| ---------------- | ------------------------------------ |
+| `.comic-pop`     | Pops in with a quick overshoot.      |
+| `.halftone-wipe` | Wipes in behind a halftone sweep.    |
+| `.ink-splat`     | Splats in like wet ink.              |
+| `.zap-highlight` | Flashes a highlight across the text. |
+
+```markdown
+- [Locate the source of the broadcast.]{.fragment .comic-pop}
+
+[The neon hum dims below the clouds.]{.fragment .ink-splat}
+```
+
+### Per-slide options
+
+Tune the comic plugins with data attributes:
+
+| Attribute                  | Where         | Effect                                                               |
+| -------------------------- | ------------- | -------------------------------------------------------------------- |
+| `data-comic-fit="false"`   | slide heading | Leaves the slide at its natural size instead of auto-scaling to fit. |
+| `data-no-sound`            | slide heading | Silences the page-turn whoosh for that one slide.                    |
+| `data-comic-sound="false"` | document body | Mutes the page-turn whoosh for the whole deck.                       |
+
+```markdown
+## Natural Size {.panel data-comic-fit="false"}
+
+## Silent Panel {.panel data-no-sound=true}
+```
 
 ### `bam` and `boom` shortcodes
 
@@ -87,37 +140,20 @@ Both share the same attributes:
 {{< boom "KA-BLAM!" colour=red top=12% right=8% rotate=-10 fragment=burst >}}
 ```
 
-| Attribute | Values | Default | Effect |
-| --- | --- | --- | --- |
-| _(text)_ | any string | `BAM!` / `BOOM!` | The callout text. |
-| `colour` | `yellow`, `red`, `blue` | `yellow` (`bam`), `red` (`boom`) | Fill/ink colour. |
-| `top`, `right`, `bottom`, `left` | CSS length (e.g. `10%`, `40px`, `2em`) | none | When any is set, the callout floats with `position: absolute`. |
-| `rotate` | number (degrees) or `Ndeg` | `-4deg` (`bam`), `-6deg` (`boom`) | Tilt angle. |
-| `size` | CSS font-size (e.g. `3em`, `64px`) | theme default | Callout size. |
-| `fragment` | `true`, `burst`, `pop`, `splat` (or `false`/`off`) | off | Reveals the callout as a fragment with the matching comic entrance (`true` maps to `burst`). |
-| `index` | non-negative integer | none | Sets `data-fragment-index` to order the callout among the slide's fragments. |
+| Attribute                        | Values                                             | Default                           | Effect                                                                                       |
+| -------------------------------- | -------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------- |
+| _(text)_                         | any string                                         | `BAM!` / `BOOM!`                  | The callout text.                                                                            |
+| `colour`                         | `yellow`, `red`, `blue`                            | `yellow` (`bam`), `red` (`boom`)  | Fill/ink colour.                                                                             |
+| `top`, `right`, `bottom`, `left` | CSS length (e.g. `10%`, `40px`, `2em`)             | none                              | When any is set, the callout floats with `position: absolute`.                               |
+| `rotate`                         | number (degrees) or `Ndeg`                         | `-4deg` (`bam`), `-6deg` (`boom`) | Tilt angle.                                                                                  |
+| `size`                           | CSS font-size (e.g. `3em`, `64px`)                 | theme default                     | Callout size.                                                                                |
+| `fragment`                       | `true`, `burst`, `pop`, `splat` (or `false`/`off`) | off                               | Reveals the callout as a fragment with the matching comic entrance (`true` maps to `burst`). |
+| `index`                          | non-negative integer                               | none                              | Sets `data-fragment-index` to order the callout among the slide's fragments.                 |
 
 ## Example
 
-Source: [template.qmd](template.qmd).
-Rendered output: [HTML](https://m.canouil.dev/quarto-revealjs-comic/).
+Here is the source code for a comprehensive example: [template.qmd](template.qmd).
 
-The template now demonstrates a broader Quarto workflow in a Reveal.js context, including:
+Output of `template.qmd`:
 
-- `layout-*` attributes (`layout-ncol`, `layout-nrow`, `layout-valign`).
-- Tabbed panels with `.panel-tabset`.
-- Cross-references for sections, figures, and tables.
-- Labelled tables and figures.
-- Callouts and citation-backed narrative (`references.bib`).
-
-For dense technical content, prefer plain slides or `.panel` slides for readability.
-Use highly stylised classes such as `.action` and `.speech` for emphasis or short narrative moments.
-
-## Author
-
-Mickaël Canouil, _Ph.D._ ([https://mickael.canouil.fr](https://mickael.canouil.fr), [ORCID](https://orcid.org/0000-0002-3396-4549)).
-
-## Acknowledgements
-
-Built on top of the Reveal.js engine shipped with Quarto.
-Web fonts served by Google Fonts: Bangers, Permanent Marker, Comic Neue.
+- [Reveal.js](https://m.canouil.dev/quarto-revealjs-comic/)
