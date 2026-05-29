@@ -2,18 +2,13 @@
   comic.lua
   Reveal.js filter for the comic theme.
 
-  Three responsibilities:
+  Two responsibilities:
 
   1. Wraps dialogue divs (.speech, .thought, .shout, .whisper, .narration) in
      a typed inner wrapper so the comic theme can paint each bubble variant
      with its own shape, border, and tail.
 
-  2. Renders .character divs as a CSS-drawn caped hero avatar beside a
-     Markdown-filled bubble. Attributes: pose (left|right), state (talk|action),
-     and bubble (speech|thought|shout|whisper) select placement, pose, and which
-     bubble variant styles the dialogue.
-
-  3. For .section slides, splits the heading text on the first ':' into a
+  2. For .section slides, splits the heading text on the first ':' into a
      <span class="section-banner"> + <span class="section-title"> pair so the
      comic theme can show a banner chip above the title (e.g.
      "## Chapter 1: The Setup {.section}" → banner "Chapter 1", title
@@ -30,48 +25,14 @@ local bubble_classes = {
   narration = "bubble-narration",
 }
 
--- Whitelists for .character attributes; unknown values fall back to defaults.
-local character_poses = { left = true, right = true }
-local character_states = { talk = true, action = true }
-
--- Pick a whitelisted attribute value, or the default.
-local function pick(value, whitelist, default)
-  if value and whitelist[value] then
-    return value
-  end
-  return default
-end
-
--- Build the CSS-drawn hero avatar (cape, body, head are painted in comic.scss).
-local function character_figure()
-  local layers = {
-    pandoc.Span({}, pandoc.Attr("", { "character-cape" }, {})),
-    pandoc.Span({}, pandoc.Attr("", { "character-body" }, {})),
-    pandoc.Span({}, pandoc.Attr("", { "character-head" }, {})),
-  }
-  return pandoc.Div(layers, pandoc.Attr("", { "character-figure" }, { ["aria-hidden"] = "true" }))
-end
-
 local function Div(el)
   if not quarto.doc.is_format("revealjs") then
     return nil
   end
 
-  if helpers.has_class(el.classes, "character") then
-    local pose = pick(el.attributes.pose, character_poses, "left")
-    local state = pick(el.attributes.state, character_states, "talk")
-    local bubble = bubble_classes[el.attributes.bubble] or bubble_classes.speech
-
-    local bubble_div = pandoc.Div(el.content, pandoc.Attr("", { bubble, "character-bubble" }, {}))
-    return pandoc.Div(
-      { character_figure(), bubble_div },
-      pandoc.Attr("", { "character", "character-" .. pose, "character-" .. state }, {})
-    )
-  end
-
   for source_class, wrapper_class in pairs(bubble_classes) do
     if helpers.has_class(el.classes, source_class) then
-      return pandoc.Div(el.content, pandoc.Attr("", { wrapper_class }, {}))
+      return pandoc.Div(el.content, helpers.attr(nil, { wrapper_class }))
     end
   end
   return nil
@@ -99,7 +60,7 @@ local function Header(el)
 
   if not split_idx then
     -- No colon: wrap the whole heading as the title span; no banner.
-    el.content = { pandoc.Span(el.content, pandoc.Attr("", { "section-title" }, {})) }
+    el.content = { pandoc.Span(el.content, helpers.attr(nil, { "section-title" })) }
     return el
   end
 
@@ -128,9 +89,9 @@ local function Header(el)
 
   local new_inlines = pandoc.List({})
   if #banner_inlines > 0 then
-    new_inlines:insert(pandoc.Span(banner_inlines, pandoc.Attr("", { "section-banner" }, {})))
+    new_inlines:insert(pandoc.Span(banner_inlines, helpers.attr(nil, { "section-banner" })))
   end
-  new_inlines:insert(pandoc.Span(title_inlines, pandoc.Attr("", { "section-title" }, {})))
+  new_inlines:insert(pandoc.Span(title_inlines, helpers.attr(nil, { "section-title" })))
 
   el.content = new_inlines
   return el
@@ -193,19 +154,36 @@ local function Pandoc(doc)
         j = j + 1
       end
 
+      -- Pull a trailing .caption out of the wrapper so it stays pinned to the
+      -- slide corner and unscaled. Skip trailing Quarto-generated blocks first
+      -- (e.g. on a #refs slide Quarto appends a .quarto-auto-generated-content
+      -- div and an empty .hidden div after the caption), so the caption is still
+      -- found when it is not literally the last block.
+      local function ignorable(b)
+        if b.t ~= "Div" then
+          return false
+        end
+        return #b.content == 0
+          or helpers.has_class(b.classes, "hidden")
+          or helpers.has_class(b.classes, "quarto-auto-generated-content")
+      end
+
       local trailing_caption
-      if #body > 0 then
-        local last = body[#body]
-        if last.t == "Div" and helpers.has_class(last.classes, "caption") then
-          trailing_caption = last
-          body:remove(#body)
+      do
+        local k = #body
+        while k > 0 and ignorable(body[k]) do
+          k = k - 1
+        end
+        if k > 0 and body[k].t == "Div" and helpers.has_class(body[k].classes, "caption") then
+          trailing_caption = body[k]
+          body:remove(k)
         end
       end
 
       if #body > 0 then
         local stage = header_stage_class(blk)
         local classes = stage and { "comic-stage", "comic-fit" } or { "comic-fit" }
-        out:insert(pandoc.Div(body, pandoc.Attr("", classes, {})))
+        out:insert(pandoc.Div(body, helpers.attr(nil, classes)))
       end
       if trailing_caption then
         out:insert(trailing_caption)

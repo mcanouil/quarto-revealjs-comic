@@ -11,6 +11,17 @@ local M = {}
 -- VALIDATION
 -- ============================================================================
 
+--- True when `s` is a signed decimal number followed by `suffix` (a Lua
+--- pattern). Two alternatives keep at least one digit on either side of the
+--- decimal point (so `5`, `.5`, and `1.5` match but a bare `.` does not).
+--- @param s string
+--- @param suffix string Trailing Lua pattern (e.g. "", "[a-z]+", "%%", "deg").
+--- @return boolean
+local function numeric(s, suffix)
+  return s:match("^%-?%d+%.?%d*" .. suffix .. "$") ~= nil
+    or s:match("^%-?%d*%.?%d+" .. suffix .. "$") ~= nil
+end
+
 --- Colours both callouts accept; unknown values fall back to the default.
 M.valid_colours = { yellow = true, red = true, blue = true }
 
@@ -39,12 +50,7 @@ function M.safe_length(value)
   if s == "" then
     return nil
   end
-  if s:match("^%-?%d+%.?%d*$")
-    or s:match("^%-?%d*%.?%d+$")
-    or s:match("^%-?%d+%.?%d*[a-z]+$")
-    or s:match("^%-?%d*%.?%d+[a-z]+$")
-    or s:match("^%-?%d+%.?%d*%%$")
-    or s:match("^%-?%d*%.?%d+%%$") then
+  if numeric(s, "") or numeric(s, "[a-z]+") or numeric(s, "%%") then
     return s
   end
   return nil
@@ -59,10 +65,10 @@ function M.safe_angle(value)
     return nil
   end
   local s = pandoc.utils.stringify(value)
-  if s:match("^%-?%d+%.?%d*$") or s:match("^%-?%d*%.?%d+$") then
+  if numeric(s, "") then
     return s .. "deg"
   end
-  if s:match("^%-?%d+%.?%d*deg$") or s:match("^%-?%d*%.?%d+deg$") then
+  if numeric(s, "deg") then
     return s
   end
   return nil

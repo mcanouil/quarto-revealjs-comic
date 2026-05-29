@@ -130,13 +130,18 @@ var RevealComicFit = window.RevealComicFit || (function () {
     if (scale < cfg.minScale) scale = cfg.minScale;
     fit.style.setProperty("--comic-fit-scale", scale.toFixed(4));
 
-    // Flow slides: lock the wrapper height to its scaled height (width is left
-    // alone so text does not re-wrap) so the section flow reflects the visual
-    // size. If it still overflows the floor, enable the comic scrollbar.
+    // Flow slides: lock the wrapper height (width is left alone so text does not
+    // re-wrap) so the section flow reflects the visual size.
     if (!isStage) {
-      fit.style.height = (contentH * scale) + "px";
       if (contentH * scale > availH + tol) {
+        // Overflows at the floor: bound the wrapper to the available height so
+        // it scrolls internally (CSS overflow:auto), keeping the section
+        // overflow visible so the hanging chip/caption are not clipped. availH
+        // already excludes the in-flow chip height (see the sibling loop above).
+        fit.style.height = availH + "px";
         section.classList.add("comic-fit-scroll");
+      } else {
+        fit.style.height = (contentH * scale) + "px";
       }
     }
   }
@@ -165,7 +170,16 @@ var RevealComicFit = window.RevealComicFit || (function () {
     init: function (reveal) {
       reveal.on("ready", function () { apply(reveal); });
       reveal.on("slidechanged", function (e) { apply(reveal, e.currentSlide); });
-      reveal.on("resize", function () { apply(reveal); });
+      // resize fires in rapid bursts during a window drag; debounce so the
+      // full-deck re-fit (with its per-slide reflows) runs once it settles.
+      var resizeTimer = null;
+      reveal.on("resize", function () {
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          resizeTimer = null;
+          apply(reveal);
+        }, 150);
+      });
       // Web fonts change text metrics after first layout; re-fit once loaded.
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(function () { apply(reveal); });

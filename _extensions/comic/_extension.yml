@@ -24,3 +24,4 @@ contributes:
         - revealjs-plugin/comic-cover
         - revealjs-plugin/comic-section
         - revealjs-plugin/comic-fit
+        - revealjs-plugin/tabset

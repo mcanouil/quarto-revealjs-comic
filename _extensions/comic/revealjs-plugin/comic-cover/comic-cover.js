@@ -17,19 +17,15 @@ var RevealComicCover = window.RevealComicCover || (function () {
 
   var COVER_SELECTOR = "section.title-slide.comic-cover";
 
-  function apply(reveal) {
+  // One-time: bleed the cover decor onto the full-viewport background layer.
+  function bleed(reveal) {
     var root = reveal.getRevealElement();
     if (!root) return;
-
     var slide = root.querySelector(COVER_SELECTOR);
     if (!slide) return;
 
-    root.classList.toggle("comic-on-cover", reveal.getCurrentSlide() === slide);
-
     var background = reveal.getSlideBackground(slide);
-    if (!background) return;
-
-    if (background.querySelector(".cover-decor")) return;
+    if (!background || background.querySelector(".cover-decor")) return;
 
     var decor = slide.querySelector(".cover-decor");
     if (!decor) return;
@@ -39,11 +35,20 @@ var RevealComicCover = window.RevealComicCover || (function () {
     root.classList.add("comic-cover-bled");
   }
 
+  // Per-slide: only the cover slide reveals the bled background.
+  function toggleOnCover(reveal) {
+    var root = reveal.getRevealElement();
+    if (!root) return;
+    var slide = root.querySelector(COVER_SELECTOR);
+    if (!slide) return;
+    root.classList.toggle("comic-on-cover", reveal.getCurrentSlide() === slide);
+  }
+
   return {
     id: "comic-cover",
     init: function (reveal) {
-      reveal.on("ready", function () { apply(reveal); });
-      reveal.on("slidechanged", function () { apply(reveal); });
+      reveal.on("ready", function () { bleed(reveal); toggleOnCover(reveal); });
+      reveal.on("slidechanged", function () { toggleOnCover(reveal); });
     }
   };
 })();

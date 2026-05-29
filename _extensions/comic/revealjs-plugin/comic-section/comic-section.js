@@ -46,8 +46,9 @@ var RevealComicSection = window.RevealComicSection || (function () {
   return {
     id: "comic-section",
     init: function (reveal) {
+      // Numbering and the bled class are stable once backgrounds exist, so
+      // stamp once on ready; navigation never changes them.
       reveal.on("ready", function () { apply(reveal); });
-      reveal.on("slidechanged", function () { apply(reveal); });
     }
   };
 })();

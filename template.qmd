@@ -24,6 +24,18 @@ references:
       Diabetes and Fasting Plasma Glucose"
     type: article-journal
     journal-title: "Frontiers in Genetics"
+# The cover slide is auto-tagged `.title-slide .comic-cover` with `data-no-sound`
+# (see partials/title-slide.html): the comic-cover plugin bleeds the halftone
+# cover to the full viewport and the page-turn plugin stays silent on it.
+# The comic-fit plugin auto-scales every slide and accepts optional tuning via
+# the reveal config, e.g.:
+#   comicFit:
+#     enabled: true   # turn auto-scaling on or off
+#     minScale: 0.5   # floor before switching to scroll
+#     maxScale: 1      # never enlarge content
+#     tolerance: 1     # pixels of slack to avoid jitter
+# Deck-wide page-turn sound can be muted with `data-comic-sound="false"` on
+# <body> (set via an include-in-header partial when desired).
 format:
   comic-revealjs: default
 ---
@@ -44,6 +56,10 @@ Signal projection over the skyline.
 
 The signal in @fig-signal calls our hero into action.
 
+::: {.caption}
+`.panel` slide with a cross-referenced figure.
+:::
+
 ## Briefing {.panel}
 
 Mission objectives, decoded from dispatch.
@@ -54,7 +70,7 @@ Mission objectives, decoded from dispatch.
 - [Avoid the press at all costs.]{.fragment .comic-pop}
 
 ::: {.caption}
-Briefing read at 23:47.
+List items revealed with the `.comic-pop` fragment.
 :::
 
 ## Detective Board {.panel}
@@ -69,6 +85,18 @@ The pattern matches no known broadcast.
 Triangulate from the three nearest towers.
 Compare with last week's interference report.
 :::
+
+::: {.callout-warning collapse="false" title="What to watch"}
+The rooftop access is unstable after midnight.
+:::
+
+::: {.callout-important collapse="false" title="What matters"}
+Recover the circuitry before the trail goes cold.
+:::
+:::
+
+::: {.caption}
+Themed callouts: `note`, `tip`, `warning`, and `important`.
 :::
 
 ## Incident Summary {.panel}
@@ -83,11 +111,19 @@ Compare with last week's interference report.
 
 Table @tbl-incidents shows where to focus tonight.
 
+> The numbers never lie, but they rarely confess either.
+>
+> Dispatch logbook, night shift.
+
+::: {.caption}
+Themed table and blockquote inside a `.panel`.
+:::
+
 # Issue 02: The Investigation {.section}
 
 ## Investigator's Notes {.panel}
 
-::: {.panel-tabset}
+::: {.panel-tabset data-tab-active="1" data-tabset-skip-pdf-clone="true"}
 #### Narrative
 
 [The hero arrives at the rooftop while the city still glows.]{.fragment .halftone-wipe}
@@ -110,9 +146,15 @@ paste("Patrol active in", city)
 ```
 :::
 
+::: {.caption}
+Interactive `.panel-tabset` opening on tab 2 via `data-tab-active`.
+:::
+
 ## Witness Statement {.speech}
 
 I saw a flash, and then nothing.
+
+The witness will not say more.
 
 ## Inner Monologue
 
@@ -122,6 +164,10 @@ If the signal repeats every 11 minutes, the next pulse is in 3.
 
 The hero counts the seconds.
 
+::: {.caption}
+A `.thought` bubble div.
+:::
+
 ## Out of Nowhere... {.action}
 
 ZAP!
@@ -129,6 +175,8 @@ ZAP!
 {{< bam "POW!" colour=red top=35% right=8% rotate=12 size=2.6em fragment=burst index=1 >}}
 
 {{< bam "WHAM!" colour=blue top=58% left=10% rotate=-8 size=2em fragment=pop index=2 >}}
+
+{{< bam "THWACK!" colour=yellow bottom=12% left=14% rotate=6 size=1.8em fragment=splat index=3 >}}
 
 ## "Stop right there!"
 
@@ -138,11 +186,19 @@ Stop right there!
 
 The rooftop falls silent.
 
+::: {.caption}
+A `.shout` bubble div.
+:::
+
 ## City At Night {.halftone}
 
 [The neon hum dims below the clouds.]{.fragment .ink-splat}
 
 [Somewhere, a clock tower chimes once.]{.fragment .ink-splat}
+
+::: {.caption}
+`.halftone` slide with the `.ink-splat` fragment.
+:::
 
 ## Showdown {.panel .halftone}
 
@@ -150,11 +206,19 @@ The hero faces the [unknown broadcaster]{.fragment .zap-highlight} on the roofto
 
 The signal pulses one more time.
 
+::: {.caption}
+`.panel` and `.halftone` combined; `.zap-highlight` fragment.
+:::
+
 ## {.explosion}
 
 KA-BOOM!
 
 {{< boom "BLAM!" colour=yellow top=62% left=8% rotate=-14 size=1.6em >}}
+
+{{< boom "KRAK!" colour=red top=28% right=12% rotate=10 size=1.5em fragment=burst index=1 >}}
+
+{{< boom "ZRT!" colour=blue bottom=18% right=20% rotate=-6 size=1.2em fragment=pop index=2 >}}
 
 ## Aftermath {.panel}
 
@@ -181,6 +245,10 @@ The press is already on its way.
 :::
 :::
 
+::: {.caption}
+A `.narration` box above two `.columns`.
+:::
+
 ## "Until next time..." {.speech}
 
 ::: {.whisper}
@@ -189,16 +257,59 @@ Until next time.
 
 The hero disappears over the rooftop edge.
 
-## Two Columns {.panel}
+::: {.caption}
+A `.whisper` bubble div on a `.speech` slide.
+:::
 
-::: {.columns}
-::: {.column width="50%"}
-Left column reads as its own sub-panel.
+# Field Manual {.section}
+
+Every device in this issue, labelled for the next writer.
+
+## Bubbles On Demand {.panel}
+
+As a div, `.speech` becomes an inline bubble inside any slide.
+
+::: {.speech}
+Use me when a character speaks mid-panel.
 :::
-::: {.column width="50%"}
-Right column matches its sibling's height.
+
+::: {.caption}
+A `.speech` div bubble, distinct from the `.speech` slide class.
 :::
+
+## Handle With Care {.panel}
+
+::: {.callout-caution collapse="false" title="What can go wrong"}
+Stacking too many fragments on one slide can outpace the page-turn.
 :::
+
+::: {.caption}
+The `caution` callout completes the five themed variants.
+:::
+
+## Natural Size {.panel data-comic-fit="false"}
+
+This slide carries `data-comic-fit="false"`, so the comic-fit plugin leaves it at its natural size instead of auto-scaling to fit.
+
+Every other slide shrinks, then scrolls, to stay inside the panel.
+
+::: {.caption}
+`data-comic-fit="false"` opts a slide out of auto-scaling.
+:::
+
+## Silent Panel {.panel data-no-sound=true}
+
+This slide carries `data-no-sound`, so the page-turn plugin makes no whoosh when it appears.
+
+Mute the whole deck instead with `data-comic-sound="false"` on the document body.
+
+::: {.caption}
+`data-no-sound` silences the page-turn for one slide.
+:::
+
+# Issue 01-02: End of Issue {.section}
+
+To be continued in ...
 
 ## Evidence Notes and Citations {.panel}
 
@@ -206,11 +317,15 @@ Comic scholarship can still be rigorous [@canouil_jointly_2018].
 
 The signal pattern echoes earlier findings on jointly modelled longitudinal traits.
 
-# Issue 01-02: End of Issue {.section}
-
-To be continued in ...
+::: {.caption}
+Citations link to the themed bibliography.
+:::
 
 ## References {.panel .scrollable}
 
 ::: {#refs}
+:::
+
+::: {.caption}
+References scroll when they overflow the panel.
 :::

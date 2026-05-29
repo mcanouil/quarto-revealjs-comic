@@ -520,7 +520,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       padding: 0.1em 0.5em;
       border: $ink-border;
       font-size: 1.4em;
-      margin: 0 0 0.4em -5%;
+      margin: 0 0 0.4em -6%;
       position: relative;
       z-index: 2;
     }
@@ -731,7 +731,6 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     padding: 8%;
 
     // Keep full-width children spanning despite align-items: center.
-    > .comic-character,
     > .columns { align-self: stretch; }
   }
 
@@ -881,8 +880,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
         &:focus-visible { outline: 3px solid $comic-red; outline-offset: 2px; }
       }
 
-      a.active,
-      a[data-tabby-default] {
+      a[aria-selected="true"] {
         background: $comic-yellow;
         transform: translate(2px, 2px);
         box-shadow: 2px 2px 0 $comic-ink;
@@ -1605,10 +1603,10 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
 
   // Past section (forward navigation): hinges around its left edge and
   // rotates -100deg, lifting away to the left.
-  &.slide .slides > section:not([data-transition]).past,
-  &.slide .slides > section:not([data-transition]).stack.past,
-  & .slides > section[data-transition~="slide-out"].past,
-  & .slides > section.past {
+  &.slide:not(.overview) .slides > section:not([data-transition]).past,
+  &.slide:not(.overview) .slides > section:not([data-transition]).stack.past,
+  &:not(.overview) .slides > section[data-transition~="slide-out"].past,
+  &:not(.overview) .slides > section.past {
     transform: rotateY(-100deg) !important;
     transform-origin: left center !important;
     opacity: 0 !important;
@@ -1616,10 +1614,10 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
 
   // Future section (forward navigation): waits hinged on its right edge
   // at +100deg, then rotates in to settle at 0deg as the page lands.
-  &.slide .slides > section:not([data-transition]).future,
-  &.slide .slides > section:not([data-transition]).stack.future,
-  & .slides > section[data-transition~="slide-in"].future,
-  & .slides > section.future {
+  &.slide:not(.overview) .slides > section:not([data-transition]).future,
+  &.slide:not(.overview) .slides > section:not([data-transition]).stack.future,
+  &:not(.overview) .slides > section[data-transition~="slide-in"].future,
+  &:not(.overview) .slides > section.future {
     transform: rotateY(100deg) !important;
     transform-origin: right center !important;
     opacity: 0 !important;
@@ -1628,12 +1626,12 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   // Vertical (nested) sections use the same right-to-left page flip as
   // horizontal navigation — no rotateX. Authors get one consistent motion
   // throughout the deck.
-  & .slides > section > section.past {
+  &:not(.overview) .slides > section > section.past {
     transform: rotateY(-100deg) !important;
     transform-origin: left center !important;
   }
 
-  & .slides > section > section.future {
+  &:not(.overview) .slides > section > section.future {
     transform: rotateY(100deg) !important;
     transform-origin: right center !important;
   }
@@ -1642,14 +1640,42 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   // When the comic-fit plugin cannot shrink a slide enough to fit (content
   // would fall below the minimum scale), it tags the slide so the inner box
   // scrolls instead of cropping. Placed after the slide-level overflow: hidden
-  // rules so it wins the tie and re-enables scrolling. Flow slides scroll the
-  // section; stage slides scroll the absolute .comic-stage child.
-  .slides section.comic-fit-scroll {
+  // rules so it wins the tie and re-enables scrolling. Flow slides scroll their
+  // inner .comic-fit wrapper (so the section can stay overflow:visible and the
+  // hanging chip/caption are not clipped); stage slides scroll the absolute
+  // .comic-stage child.
+  .slides section.comic-fit-scroll .comic-stage {
     overflow: auto;
   }
 
-  .slides section.comic-fit-scroll .comic-stage {
+  // Flow slides: keep the section overflow visible so the heading chip (negative
+  // left margin) and the pinned caption hang past the card; scroll the inner
+  // wrapper (bounded to a px height by the comic-fit plugin). Reserve bottom
+  // space so scrolled content clears the corner-pinned caption.
+  .slides section.comic-fit-scroll {
+    overflow: visible;
+  }
+
+  .slides section.comic-fit-scroll > .comic-fit:not(.comic-stage) {
     overflow: auto;
+    max-height: calc(100% - 3.5em);
+    padding-bottom: 2.8em;
+  }
+
+  // Panel + Quarto .scrollable: the comic-fit plugin skips .scrollable, so this
+  // is CSS-only. Give the section a definite height so the wrapper's max-height
+  // resolves (reveal sections are height:auto with only min-height:100%). Keep
+  // section overflow visible so the chip and the pinned caption hang past the
+  // card; scroll the wrapper, reserving the chip above and the caption below.
+  .slides section.panel.scrollable {
+    overflow: visible;
+    height: 100%;
+  }
+
+  .slides section.panel.scrollable > .comic-fit {
+    overflow: auto;
+    max-height: calc(100% - 3em);
+    padding-bottom: 2.8em;
   }
 
   // ===== Scrollable slide scrollbar (comic ink) =====
@@ -1657,6 +1683,8 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   // the comic-fit scroll floor above. Style them in the comic palette so even
   // the overflow case stays on-theme.
   .slides section.scrollable,
+  .slides section.panel.scrollable > .comic-fit,
+  .slides section.comic-fit-scroll > .comic-fit:not(.comic-stage),
   .slides section.comic-fit-scroll,
   .slides section.comic-fit-scroll .comic-stage {
     &::-webkit-scrollbar {
@@ -1683,13 +1711,19 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   // The Reveal-menu plugin emits a hamburger button bottom-left and Reveal
   // emits a slide-number readout bottom-right. Style both as comic chips.
 
-  // Menu button: yellow stamp with ink border, hand-drawn three-stroke icon.
+  // Menu button: round yellow stamp with ink border, lightning-bolt icon.
+  // Circular so it reads as an action control, not a second page-number chip.
   .slide-menu-button {
     background: $comic-yellow !important;
     border: 3px solid $comic-ink !important;
     box-shadow: 3px 3px 0 $comic-ink !important;
-    border-radius: 0 !important;
-    padding: 0.3em 0.5em !important;
+    border-radius: 50% !important;
+    width: 2.1em;
+    height: 2.1em;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transform: rotate(-2deg);
 
     &:hover {
@@ -1703,7 +1737,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
 
     .fas.fa-bars::before,
     .fa.fa-bars::before {
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M3 7 Q16 5 30 8 L29 11 Q15 9 4 10 Z" fill="%230b0b0b"/><path d="M2 15 Q16 13 30 16 L30 19 Q16 17 3 18 Z" fill="%230b0b0b"/><path d="M3 23 Q16 21 30 24 L29 27 Q15 25 4 26 Z" fill="%230b0b0b"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="%230b0b0b" d="M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.25 1.25 0 0 1-.871.354h-.302a1.25 1.25 0 0 1-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004zm1.047 1.074L3.286 8.571A.25.25 0 0 0 3.462 9H6.75a.75.75 0 0 1 .694 1.034l-1.713 4.188l6.982-6.793A.25.25 0 0 0 12.538 7H9.25a.75.75 0 0 1-.683-1.06l2.008-4.418l.003-.006l-.004-.009l-.006-.006l-.008-.001q-.005 0-.009.004"/></svg>');
       background-color: transparent;
       background-repeat: no-repeat;
       background-position: center;

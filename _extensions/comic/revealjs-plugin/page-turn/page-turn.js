@@ -4,7 +4,7 @@
  * change so the comic theme's page-turn transition has an audio cue.
  *
  * No binary assets. The sound is generated via the Web Audio API as a
- * short band-pass filtered white-noise burst with a fast attack and a
+ * short band-pass filtered pink-noise burst with a fast attack and a
  * decay envelope, panned by navigation direction.
  *
  * Respects:
@@ -36,6 +36,10 @@ var RevealComicPageTurn = window.RevealComicPageTurn || (function () {
       && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
+  function overviewActive() {
+    return typeof Reveal.isOverview === "function" && Reveal.isOverview();
+  }
+
   function ensureContext() {
     if (audioCtx) return audioCtx;
     var Ctx = window.AudioContext || window.webkitAudioContext;
@@ -58,9 +62,19 @@ var RevealComicPageTurn = window.RevealComicPageTurn || (function () {
     return buffer;
   }
 
+  // An AudioBuffer is reusable across single-use source nodes, and only a fixed
+  // set of durations is ever requested, so build each once and cache it.
+  var noiseBuffers = {};
+  function pinkNoiseBuffer(ctx, duration) {
+    if (!noiseBuffers[duration]) {
+      noiseBuffers[duration] = buildPinkNoiseBuffer(ctx, duration);
+    }
+    return noiseBuffers[duration];
+  }
+
   function scheduleBurst(ctx, opts) {
     var source = ctx.createBufferSource();
-    source.buffer = buildPinkNoiseBuffer(ctx, opts.duration);
+    source.buffer = pinkNoiseBuffer(ctx, opts.duration);
 
     var bandpass = ctx.createBiquadFilter();
     bandpass.type = "bandpass";
@@ -107,6 +121,7 @@ var RevealComicPageTurn = window.RevealComicPageTurn || (function () {
     if (muted) return;
     if (deckOptedOut()) return;
     if (prefersReducedMotion()) return;
+    if (overviewActive()) return;
 
     var ctx = ensureContext();
     if (!ctx) return;
