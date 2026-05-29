@@ -1,29 +1,11 @@
 ---
 title: "Caped Crusader"
 subtitle: "Issue 01: The Signal"
-author: "Mickaël Canouil"
+author:
+  - name: "Mickaël CANOUIL, _Ph.D._"
+    orcid: "0000-0002-3396-4549"
+    url: "https://mickael.canouil.fr"
 date: today
-references:
-  - id: canouil_jointly_2018
-    author:
-      - family: Canouil
-        given: Mickaël
-      - family: Balkau
-        given: Beverley
-      - family: Roussel
-        given: Ronan
-      - family: Froguel
-        given: Philippe
-      - family: Rocheleau
-        given: Ghislain
-    container-title: Frontiers in Genetics
-    doi: 10.3389/fgene.2018.00210
-    issued: 2018
-    title: "Jointly Modelling Single Nucleotide Polymorphisms With
-      Longitudinal and Time-to-Event Trait: An Application to Type 2
-      Diabetes and Fasting Plasma Glucose"
-    type: article-journal
-    journal-title: "Frontiers in Genetics"
 # The cover slide is auto-tagged `.title-slide .comic-cover` with `data-no-sound`
 # (see partials/title-slide.html): the comic-cover plugin bleeds the halftone
 # cover to the full viewport and the page-turn plugin stays silent on it.
@@ -37,7 +19,8 @@ references:
 # Deck-wide page-turn sound can be muted with `data-comic-sound="false"` on
 # <body> (set via an include-in-header partial when desired).
 format:
-  comic-revealjs: default
+  comic-revealjs:
+    output-file: index
 ---
 
 # Issue 01: The Signal {.section}
@@ -102,10 +85,10 @@ Themed callouts: `note`, `tip`, `warning`, and `important`.
 ## Incident Summary {.panel}
 
 | District | Alerts | Resolved | Priority |
-|---|---:|---:|---|
-| Old Town | 14 | 11 | Medium |
-| Dockside | 9 | 5 | High |
-| Midtown | 7 | 7 | Low |
+| -------- | -----: | -------: | -------- |
+| Old Town |     14 |       11 | Medium   |
+| Dockside |      9 |        5 | High     |
+| Midtown  |      7 |        7 | Low      |
 
 : Dispatch incident summary. {#tbl-incidents}
 
@@ -123,7 +106,8 @@ Themed table and blockquote inside a `.panel`.
 
 ## Investigator's Notes {.panel}
 
-::: {.panel-tabset data-tabset-skip-pdf-clone="true"}
+::: {.panel-tabset tabset-skip-pdf-clone="true"}
+
 #### Narrative {.active}
 
 [The hero arrives at the rooftop while the city still glows.]{.fragment .halftone-wipe}
@@ -132,11 +116,11 @@ Themed table and blockquote inside a `.panel`.
 
 #### Evidence
 
-| Item | Source | Status |
-|---|---|---|
-| Burnt circuitry | Old Town alley | Bagged. |
-| Audio fragment | Dispatch tape | Decoded. |
-| Footprint cast | Rooftop edge | Pending. |
+| Item            | Source         | Status   |
+| --------------- | -------------- | -------- |
+| Burnt circuitry | Old Town alley | Bagged.  |
+| Audio fragment  | Dispatch tape  | Decoded. |
+| Footprint cast  | Rooftop edge   | Pending. |
 
 #### Code
 
@@ -144,6 +128,7 @@ Themed table and blockquote inside a `.panel`.
 city <- c("Gotham", "Metropolis", "Star City")
 paste("Patrol active in", city)
 ```
+
 :::
 
 ::: {.caption}
@@ -229,19 +214,23 @@ The press is already on its way.
 
 ::: {.columns}
 ::: {.column width="50%"}
+
 **Heroes.**
 
 - Hero secured the rooftop.
 - Witnesses gave their statements.
 - Circuitry recovered intact.
+
 :::
 
 ::: {.column width="50%"}
+
 **Villains.**
 
 - One escaped into the alleys.
 - Identity still unknown.
 - Pattern logged for next time.
+
 :::
 :::
 
@@ -309,23 +298,14 @@ Mute the whole deck instead with `data-comic-sound="false"` on the document body
 
 # Issue 01-02: End of Issue {.section}
 
-To be continued in ...
+To be continued ...
 
 ## Evidence Notes and Citations {.panel}
 
-Comic scholarship can still be rigorous [@canouil_jointly_2018].
+Comic scholarship can still be rigorous.
 
 The signal pattern echoes earlier findings on jointly modelled longitudinal traits.
 
 ::: {.caption}
 Citations link to the themed bibliography.
-:::
-
-## References {.panel .scrollable}
-
-::: {#refs}
-:::
-
-::: {.caption}
-References scroll when they overflow the panel.
 :::
