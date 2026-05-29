@@ -9,5 +9,5 @@ authors:
 repository-code: "https://github.com/mcanouil/quarto-revealjs-comic"
 url: "https://m.canouil.dev/quarto-revealjs-comic/"
 license: "MIT License"
-date-released: "2026-05-28"
-version: 0.0.0
+date-released: "2026-05-29"
+version: 0.1.0
