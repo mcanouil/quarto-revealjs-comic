@@ -50,6 +50,20 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   background-position: 0 0, 11px 11px;
 }
 
+// Chapter-splash surface: yellow starburst over halftone dots over paper.
+// Painted on the full-viewport .slide-background layer so the splash bleeds
+// edge-to-edge (the slide box is letterbox-scaled and can't reach the edges).
+@mixin comic-section-surface {
+  background-color: $comic-paper;
+  background-image:
+    $starburst-yellow,
+    radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px),
+    radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px);
+  background-repeat: no-repeat, repeat, repeat;
+  background-position: center, 0 0, 11px 11px;
+  background-size: 130% 130%, 22px 22px, 22px 22px;
+}
+
 .reveal {
   font-family: $font-family-sans-serif;
   font-weight: 400;
@@ -369,61 +383,37 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   }
 
   // ===== .section (chapter splash) =====
-  // Background layers: starburst over halftone dots over paper. The
-  // comic.lua filter rewrites the heading on the first ':' into a
-  // .section-banner chip above the .section-title text. A CSS counter
-  // adds a faded chapter number tucked in the corner.
-  .slides {
-    counter-reset: comic-section-counter;
+  // The chapter splash bleeds edge-to-edge: reveal.js renders each slide's
+  // .slide-background at full viewport size while the slide box itself is
+  // letterbox-scaled, so the starburst must be painted on the background layer
+  // to reach the screen edges. There is no class on the background to key on
+  // without JS, so :has() bridges the slide tree to its background. On screen
+  // reveal marks one slide and its matching background `.present`. In print-pdf
+  // it instead moves each .slide-background into a .pdf-page beside its
+  // <section> and marks every slide present, so a second selector keys on that
+  // wrapper. The comic.lua filter rewrites the heading on the first ':' into a
+  // .section-banner chip above the .section-title text and stamps a stable,
+  // zero-padded data-comic-number used for the faded corner number.
+  &:has(.slides section.section.present) .slide-background.present,
+  .pdf-page:has(> section.section) > .slide-background {
+    @include comic-section-surface;
   }
 
-  // The comic-section plugin stamps `comic-section` onto each .section slide's
-  // full-viewport background element, so the chapter splash bleeds edge-to-edge.
-  // Paint the full original composition here (starburst over halftone dots over
-  // paper) so the halftone is carried inside the section, not just inherited
-  // from the global .reveal-viewport layer behind it.
-  .slide-background.comic-section {
-    background-color: $comic-paper;
-    background-image:
-      $starburst-yellow,
-      radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px),
-      radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px);
-    background-repeat: no-repeat, repeat, repeat;
-    background-position: center, 0 0, 11px 11px;
-    background-size: 130% 130%, 22px 22px, 22px 22px;
-  }
-
-  // Once the plugin has bled the starburst onto the background layer, drop the
-  // in-box starburst and frame so they do not double-paint inside the slide box.
-  // Heading, banner chip, and chapter counter stay (they live in the slide box).
-  &.comic-section-bled .slides section.section {
-    background: none;
-    border: 0;
-  }
-
+  // The starburst lives on the full-viewport background layer (above); the
+  // in-box slide keeps only its content layout and the faded corner number.
   .slides section.section {
-    background:
-      $starburst-yellow,
-      radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px) 0 0 / 22px 22px,
-      radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px) 11px 11px / 22px 22px,
-      $comic-paper;
-    background-repeat: no-repeat, repeat, repeat, repeat;
-    background-position: center, 0 0, 11px 11px, center;
-    background-size: 130% 130%, 22px 22px, 22px 22px, auto;
-    border: $thick-ink-border;
     text-align: center;
-    counter-increment: comic-section-counter;
     overflow: hidden;
     min-height: 100%;
     box-sizing: border-box;
     padding: 22% 6% 6% 6%;
 
-    // Faded counter number tucked in the corner. The CSS counter is the JS-off
-    // / print fallback; the comic-section plugin stamps a stable
-    // data-comic-number that overrides it under navigation (CSS counters skip
-    // reveal.js's display:none off-screen slides, so they renumber otherwise).
+    // Faded chapter number tucked in the corner. comic.lua stamps a stable,
+    // zero-padded data-comic-number at build time; a CSS counter would renumber
+    // under navigation because reveal.js sets display:none on off-screen slides
+    // and CSS counters skip those boxes.
     &::after {
-      content: counter(comic-section-counter, decimal-leading-zero);
+      content: attr(data-comic-number);
       position: absolute;
       bottom: -1%;
       right: 2%;
@@ -435,10 +425,6 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       transform: rotate(-6deg);
       pointer-events: none;
       z-index: 0;
-    }
-
-    &[data-comic-number]::after {
-      content: attr(data-comic-number);
     }
 
     h1, h2 {

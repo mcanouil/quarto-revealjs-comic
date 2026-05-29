@@ -38,6 +38,12 @@ local function Div(el)
   return nil
 end
 
+-- Stable, zero-padded chapter number stamped onto each .section slide in
+-- document order. The comic theme renders it via content: attr(data-comic-number).
+-- Done at build time because a CSS counter renumbers under navigation:
+-- reveal.js sets display:none on off-screen slides and CSS counters skip them.
+local section_counter = 0
+
 local function Header(el)
   if not quarto.doc.is_format("revealjs") then
     return nil
@@ -45,6 +51,9 @@ local function Header(el)
   if (el.level ~= 1 and el.level ~= 2) or not helpers.has_class(el.classes, "section") then
     return nil
   end
+
+  section_counter = section_counter + 1
+  el.attributes["data-comic-number"] = string.format("%02d", section_counter)
 
   -- Find the first Str inline containing a colon.
   local split_idx, colon_pos
