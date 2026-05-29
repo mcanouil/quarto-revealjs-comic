@@ -1,0 +1,1817 @@
+/*-- scss:defaults --*/
+
+@import url("https://fonts.bunny.net/css2?family=Bangers&family=Permanent+Marker&family=Comic+Neue:wght@400;700&display=swap");
+
+// Comic palette.
+$comic-paper: #fdf6e3 !default;
+$comic-ink: #0b0b0b !default;
+$comic-red: #e63946 !default;
+$comic-yellow: #ffd60a !default;
+$comic-blue: #1d4ed8 !default;
+$comic-white: #ffffff !default;
+
+// Reveal.js variables.
+$body-bg: $comic-paper !default;
+$body-color: $comic-ink !default;
+$link-color: $comic-red !default;
+$link-color-hover: lighten($comic-red, 10%) !default;
+$selection-bg: $comic-yellow !default;
+$selection-color: $comic-ink !default;
+
+$presentation-font-size-root: 32px !default;
+$presentation-heading-font: "Bangers", "Impact", sans-serif !default;
+$presentation-heading-color: $comic-ink !default;
+$presentation-heading-font-weight: 400 !default;
+$presentation-heading-line-height: 1.1 !default;
+$presentation-heading-letter-spacing: 0.04em !default;
+$font-family-sans-serif: "Comic Neue", "Comic Sans MS", "Trebuchet MS", sans-serif !default;
+$font-family-monospace: "JetBrains Mono", "Fira Code", monospace !default;
+
+$code-block-bg: $comic-white !default;
+$code-block-border-color: $comic-ink !default;
+
+/*-- scss:rules --*/
+
+$ink-border: 4px solid $comic-ink;
+$thick-ink-border: 6px solid $comic-ink;
+$panel-shadow: 6px 6px 0 0 $comic-ink;
+$starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, transparent 70%);
+
+// Halftone Ben Day dots; muted so text stays legible.
+// Mixin (not placeholder/@extend) so each callsite emits rules at its own
+// source position. This lets section.halftone compose with .panel, .section,
+// etc.: halftone's @include is last in source, so its background wins.
+@mixin halftone-bg {
+  background-color: $comic-paper;
+  background-image:
+    radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px),
+    radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px);
+  background-size: 22px 22px;
+  background-position: 0 0, 11px 11px;
+}
+
+// Chapter-splash surface: yellow starburst over halftone dots over paper.
+// Painted on the full-viewport .slide-background layer so the splash bleeds
+// edge-to-edge (the slide box is letterbox-scaled and can't reach the edges).
+@mixin comic-section-surface {
+  background-color: $comic-paper;
+  background-image:
+    $starburst-yellow,
+    radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px),
+    radial-gradient(rgba(11, 11, 11, 0.28) 1.2px, transparent 1.5px);
+  background-repeat: no-repeat, repeat, repeat;
+  background-position: center, 0 0, 11px 11px;
+  background-size: 130% 130%, 22px 22px, 22px 22px;
+}
+
+.reveal {
+  font-family: $font-family-sans-serif;
+  font-weight: 400;
+  color: $comic-ink;
+
+  // Halftone bleeds over the whole display: paint the dots on the full-window
+  // viewport element (Reveal stamps `.reveal-viewport` onto this same `.reveal`
+  // node at runtime). `.reveal.reveal-viewport` (0-2-0) beats reveal.css'
+  // `.reveal-viewport` and Quarto's `$body-bg`, so the dots fill the letterbox
+  // margins behind every slide. `$body-bg` stays as the JS-off fallback.
+  &.reveal-viewport {
+    @include halftone-bg;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $presentation-heading-font;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 0 $comic-ink;
+    color: $comic-yellow;
+  }
+
+  h2, h3 { color: $comic-red; }
+  h4, h5, h6 { color: $comic-blue; }
+
+  .slides section img {
+    display: block;
+    max-width: 100%;
+    max-height: 70vh;
+    height: auto;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: $thick-ink-border;
+    box-shadow: $panel-shadow;
+    background: $comic-white;
+  }
+
+  .slides section div.quarto-float,
+  .slides section div.quarto-figure,
+  .slides section figure {
+    text-align: center;
+  }
+
+  .slides section figure > p,
+  .slides section div.quarto-float > p,
+  .slides section div.quarto-figure > p {
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+  }
+
+  div.sourceCode,
+  pre {
+    box-sizing: border-box;
+    border: $ink-border;
+    border-radius: 0;
+    box-shadow: $panel-shadow;
+    background: $comic-white !important;
+  }
+
+  code {
+    background: $comic-yellow;
+    color: $comic-ink;
+    padding: 0 0.2em;
+    border-radius: 2px;
+  }
+
+  .fragment.highlight-current-red.current-fragment { color: $comic-red; }
+  .fragment.highlight-current-blue.current-fragment { color: $comic-blue; }
+
+  // ===== Columns as sub-panels (global) =====
+  // Quarto's Reveal CSS resets `div.columns` to `display: initial`, so the
+  // theme must re-establish a flex row for the two-column layout to work
+  // inside Reveal slides. Each .column reads as a mini comic panel.
+  .slides .columns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1em;
+    align-items: stretch;
+  }
+
+  .slides .columns > .column {
+    background: $comic-white;
+    border: $ink-border;
+    box-shadow: $panel-shadow;
+    padding: 0.6em 0.9em;
+    box-sizing: border-box;
+    min-width: 0;
+    flex-shrink: 1;
+
+    > :first-child { margin-top: 0; }
+    > :last-child { margin-bottom: 0; }
+  }
+
+  // ===== .title-slide as comic-book cover =====
+  // The partial emits the author-provided title, subtitle, author, date
+  // wrapped inside .cover-content, and a sibling .cover-decor that holds
+  // purely visual layers (rays, stripes, burst, ink splats, frame corners).
+  // No fake publisher/issue/price text: only the author's own metadata is
+  // shown, with heavy comic-book chrome painted in CSS.
+  // The .comic-cover host paints the halftone paper and clips overflowing decor.
+  // It is applied to both the title-slide section (fallback) and, by the
+  // comic-cover plugin, to the slide's full-viewport .slide-background element so
+  // the whole cover bleeds edge-to-edge across the browser window.
+  .comic-cover {
+    @include halftone-bg;
+    overflow: hidden;
+  }
+
+  .slides section.title-slide.comic-cover {
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    text-align: center;
+    color: $comic-ink;
+  }
+
+  // When the plugin has promoted the cover to the full-viewport background layer,
+  // suppress the in-section copy so the paper and decor do not double-render.
+  &.comic-cover-bled section.title-slide.comic-cover {
+    background-color: transparent;
+    background-image: none;
+  }
+
+  &.comic-cover-bled section.title-slide .cover-decor {
+    display: none;
+  }
+
+  // Decorative chrome (aria-hidden, purely visual).
+  .comic-cover .cover-decor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .comic-cover .cover-rays {
+    position: absolute;
+    inset: -20% -10%;
+    background: repeating-conic-gradient(
+      from -8deg at 22% 48%,
+      rgba(230, 57, 70, 0.18) 0deg 8deg,
+      transparent 8deg 16deg
+    );
+  }
+
+  .comic-cover .cover-stripes {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0 14px,
+      rgba(11, 11, 11, 0.06) 14px 16px
+    );
+  }
+
+  .comic-cover .cover-burst {
+    position: absolute;
+    width: 90%;
+    aspect-ratio: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background:
+      radial-gradient(circle,
+        $comic-yellow 0%,
+        $comic-yellow 28%,
+        $comic-red 30%,
+        $comic-red 36%,
+        transparent 42%),
+      radial-gradient(circle,
+        rgba(255, 214, 10, 0.45) 0%,
+        transparent 60%);
+    background-repeat: no-repeat;
+    background-position: center;
+    clip-path: polygon(
+      50% 0%, 56% 14%, 72% 6%, 68% 22%, 86% 18%,
+      78% 32%, 96% 36%, 82% 46%, 100% 52%, 84% 60%,
+      94% 74%, 78% 70%, 84% 88%, 66% 78%, 70% 96%,
+      54% 84%, 50% 100%, 46% 84%, 30% 96%, 34% 78%,
+      16% 88%, 22% 70%, 6% 74%, 16% 60%, 0% 52%,
+      18% 46%, 4% 36%, 22% 32%, 14% 18%, 32% 22%,
+      28% 6%, 44% 14%
+    );
+    filter: drop-shadow(8px 8px 0 rgba(0, 0, 0, 0.25));
+  }
+
+  .comic-cover .cover-splat {
+    position: absolute;
+    background: $comic-ink;
+    border-radius: 50%;
+    opacity: 0.55;
+
+    &.cover-splat--a {
+      width: 28px;
+      height: 18px;
+      top: 14%;
+      left: 8%;
+      transform: rotate(20deg);
+      box-shadow:
+        18px 8px 0 -4px $comic-ink,
+        -10px 14px 0 -6px $comic-ink,
+        26px -8px 0 -8px $comic-ink;
+    }
+
+    &.cover-splat--b {
+      width: 24px;
+      height: 14px;
+      bottom: 12%;
+      right: 10%;
+      transform: rotate(-15deg);
+      box-shadow:
+        -14px 6px 0 -3px $comic-ink,
+        12px -10px 0 -6px $comic-ink,
+        -22px -6px 0 -7px $comic-ink;
+    }
+  }
+
+  .comic-cover .cover-corner {
+    position: absolute;
+    width: 7%;
+    height: 7%;
+    border: $thick-ink-border;
+
+    &.cover-corner--tl { top: 3%; left: 3%; border-right: 0; border-bottom: 0; }
+    &.cover-corner--tr { top: 3%; right: 3%; border-left: 0; border-bottom: 0; }
+    &.cover-corner--bl { bottom: 3%; left: 3%; border-right: 0; border-top: 0; }
+    &.cover-corner--br { bottom: 3%; right: 3%; border-left: 0; border-top: 0; }
+  }
+
+  // Content (author-provided). Centred horizontally and vertically inside
+  // the cover so the title, subtitle, author chips, and date stack cleanly
+  // over the decorative starburst.
+  .slides section.title-slide .cover-content {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 0 8%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .slides section.title-slide .cover-title-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3em;
+
+    .title {
+      margin: 0;
+      font-family: "Bangers", "Impact", sans-serif;
+      font-size: 3em;
+      line-height: 0.95;
+      color: $comic-yellow;
+      text-shadow:
+        3px 0 0 $comic-ink,
+        -3px 0 0 $comic-ink,
+        0 3px 0 $comic-ink,
+        0 -3px 0 $comic-ink,
+        8px 8px 0 $comic-red;
+      transform: rotate(-3deg);
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-family: "Permanent Marker", cursive;
+      font-size: 1em;
+      color: $comic-white;
+      background: $comic-blue;
+      border: $ink-border;
+      box-shadow: $panel-shadow;
+      padding: 0.2em 0.7em;
+      display: inline-block;
+      transform: rotate(-1deg);
+    }
+  }
+
+  .slides section.title-slide .cover-byline {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4em;
+    margin-top: 0.4em;
+  }
+
+  .slides section.title-slide .cover-author {
+    font-family: "Permanent Marker", cursive;
+    color: $comic-ink;
+    background: $comic-yellow;
+    border: $ink-border;
+    box-shadow: 4px 4px 0 $comic-ink;
+    padding: 0.1em 0.6em;
+    font-size: 0.9em;
+    transform: rotate(-2deg);
+
+    &:nth-of-type(even) { transform: rotate(2deg); }
+  }
+
+  .slides section.title-slide .cover-date {
+    align-self: center;
+    font-family: "Permanent Marker", cursive;
+    background: $comic-paper;
+    color: $comic-ink;
+    border: $ink-border;
+    box-shadow: 3px 3px 0 $comic-ink;
+    padding: 0.1em 0.6em;
+    font-size: 0.8em;
+    transform: rotate(-1deg);
+    margin-top: 0.3em;
+  }
+
+  // ===== .section (chapter splash) =====
+  // The chapter splash bleeds edge-to-edge: reveal.js renders each slide's
+  // .slide-background at full viewport size while the slide box itself is
+  // letterbox-scaled, so the starburst must be painted on the background layer
+  // to reach the screen edges. There is no class on the background to key on
+  // without JS, so :has() bridges the slide tree to its background. On screen
+  // reveal marks one slide and its matching background `.present`. In print-pdf
+  // it instead moves each .slide-background into a .pdf-page beside its
+  // <section> and marks every slide present, so a second selector keys on that
+  // wrapper. The comic.lua filter rewrites the heading on the first ':' into a
+  // .section-banner chip above the .section-title text and stamps a stable,
+  // zero-padded data-comic-number used for the faded corner number.
+  &:has(.slides section.section.present) .slide-background.present,
+  .pdf-page:has(> section.section) > .slide-background {
+    @include comic-section-surface;
+  }
+
+  // The starburst lives on the full-viewport background layer (above); the
+  // in-box slide keeps only its content layout and the faded corner number.
+  .slides section.section {
+    text-align: center;
+    overflow: hidden;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 22% 6% 6% 6%;
+
+    // Faded chapter number tucked in the corner. comic.lua stamps a stable,
+    // zero-padded data-comic-number at build time; a CSS counter would renumber
+    // under navigation because reveal.js sets display:none on off-screen slides
+    // and CSS counters skip those boxes.
+    &::after {
+      content: attr(data-comic-number);
+      position: absolute;
+      bottom: -1%;
+      right: 2%;
+      font-family: "Bangers", "Impact", sans-serif;
+      font-size: 7em;
+      line-height: 1;
+      color: $comic-ink;
+      opacity: 0.18;
+      transform: rotate(-6deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    h1, h2 {
+      position: relative;
+      z-index: 1;
+      font-size: 2.6em;
+      color: $comic-red;
+      text-shadow: 4px 4px 0 $comic-ink;
+      transform: rotate(-2deg);
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .section-banner {
+      display: inline-block;
+      background: $comic-paper;
+      color: $comic-ink;
+      border: $ink-border;
+      box-shadow: $panel-shadow;
+      padding: 0.12em 0.6em;
+      font-family: "Permanent Marker", cursive;
+      font-size: 0.4em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: none;
+      transform: rotate(-3deg);
+      margin-bottom: 0.4em;
+      line-height: 1.2;
+      vertical-align: top;
+    }
+
+    .section-title {
+      display: block;
+      font-family: "Bangers", "Impact", sans-serif;
+      color: $comic-red;
+      text-shadow: 4px 4px 0 $comic-ink;
+      line-height: 1.05;
+    }
+  }
+
+  // ===== .panel =====
+  // Border drawn by a pseudo-element inset so the slide content stays
+  // inside Reveal.js' fixed dimensions and the border never crops at
+  // arbitrary aspect ratios.
+  // Block-layout panel. Reveal toggles section display between block/none
+  // for navigation; we don't override it. Heading order is preserved via
+  // DOM order (Quarto emits the h2 first). Caption uses absolute pinning
+  // for bottom-right placement instead of flex.
+  .slides section.panel {
+    background: transparent;
+    box-sizing: border-box;
+    min-height: 100%;
+    padding: 3% 5% 4% 5%;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 1% 2%;
+      background: $comic-white;
+      border: $thick-ink-border;
+      box-shadow: $panel-shadow;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    // Slight left overflow so the heading chip hangs past the white
+    // card's left ink border (card starts at 3% inset; pulling the
+    // heading by -3% from the 6% panel padding lands it at the border).
+    > h1, > h2 {
+      display: inline-block;
+      background: $comic-yellow;
+      color: $comic-ink;
+      text-shadow: none;
+      padding: 0.1em 0.5em;
+      border: $ink-border;
+      font-size: 1.4em;
+      margin: 0 0 0.4em -6%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .caption {
+      // Pin caption to the bottom-right with a symmetrical right overflow
+      // mirroring the heading's left overflow. Right-align caption text.
+      position: absolute;
+      right: 5%;
+      bottom: 4%;
+      margin-right: -5%;
+      background: $comic-yellow;
+      color: $comic-ink;
+      border: $ink-border;
+      padding: 0.2em 0.6em;
+      font-family: "Permanent Marker", cursive;
+      text-align: right;
+      z-index: 2;
+    }
+  }
+
+  // ===== .action (BAM / POW / ZAP) =====
+  // Content is centred by the .comic-stage wrapper (comic.lua). Use a font-size
+  // that fits the slide bounds even after rotation, and a moderate rotation so
+  // the rotated bounding box stays inside the slide.
+  .slides section.action {
+    text-align: center;
+    overflow: hidden;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 6%;
+    background:
+      radial-gradient(circle closest-side at center, $comic-yellow 0%, $comic-yellow 38%, $comic-red 40%, $comic-red 72%, transparent 85%),
+      $comic-paper;
+    background-size: 100% 100%, auto;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    h1, h2, p {
+      margin: 0;
+      line-height: 1;
+      font-family: "Permanent Marker", cursive;
+      font-size: 3em;
+      color: $comic-yellow;
+      letter-spacing: 0.04em;
+      transform: rotate(-4deg);
+      text-shadow:
+        3px 0 0 $comic-ink,
+        -3px 0 0 $comic-ink,
+        0 3px 0 $comic-ink,
+        0 -3px 0 $comic-ink,
+        5px 5px 0 $comic-red;
+    }
+  }
+
+  // ===== Inline action callout emitted by the bam shortcode =====
+  // Supports inline positioning via the shortcode kwargs (top/right/bottom/
+  // left/rotate). When position kwargs are present, the shortcode sets
+  // inline `position: absolute` so the callout floats over the slide.
+  div.action-callout {
+    display: inline-block;
+    font-family: "Permanent Marker", cursive;
+    font-size: 2.2em;
+    line-height: 1;
+    padding: 0.1em 0.5em;
+    transform: rotate(var(--callout-rotate, -4deg));
+    text-shadow:
+      3px 0 0 $comic-ink,
+      -3px 0 0 $comic-ink,
+      0 3px 0 $comic-ink,
+      0 -3px 0 $comic-ink,
+      4px 4px 0 rgba(0, 0, 0, 0.4);
+    z-index: 5;
+  }
+
+  div.action-callout.action-yellow { color: $comic-yellow; }
+  div.action-callout.action-red    { color: $comic-red; }
+  div.action-callout.action-blue   { color: $comic-blue; }
+
+  // ===== .speech =====
+  // Slide-level: pseudo-elements draw the bubble + CSS-triangle tail.
+  // Div-level: the Lua filter wraps :::{.speech} content in .speech-bubble
+  // and the ::after triangle below provides the tail.
+  .slides section.speech {
+    background: $comic-paper;
+    text-align: center;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 12% 8%;
+
+    // Body content is centred by the .comic-stage wrapper (comic.lua), whose
+    // display reveal.js never toggles, so the text stays centred through the
+    // page-turn instead of snapping when `.present` lands.
+    &::before {
+      content: "";
+      position: absolute;
+      top: 12%;
+      left: 6%;
+      right: 6%;
+      bottom: 12%;
+      background: $comic-white;
+      border: $thick-ink-border;
+      border-radius: 50px;
+      box-shadow: $panel-shadow;
+      z-index: 0;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: calc(12% - 26px);
+      left: 24%;
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 30px solid $comic-white;
+      filter: drop-shadow(0 4px 0 $comic-ink);
+      z-index: 1;
+    }
+
+    // Heading rendered as a banner chip absolute above the bubble. Mirrors
+    // the .section-banner chip styling so .speech slide titles sit outside
+    // the bubble area without consuming flow space above the body content.
+    h1, h2 {
+      position: absolute;
+      top: 4%;
+      left: 50%;
+      transform: translateX(-50%) rotate(-3deg);
+      z-index: 2;
+      display: inline-block;
+      background: $comic-paper;
+      color: $comic-ink;
+      border: $ink-border;
+      box-shadow: $panel-shadow;
+      padding: 0.12em 0.6em;
+      font-family: "Permanent Marker", cursive;
+      font-size: 1em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: none;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    h3, p, ul, ol {
+      position: relative;
+      z-index: 1;
+      font-family: "Comic Neue", cursive;
+      font-weight: 700;
+      color: $comic-ink;
+      text-shadow: none;
+    }
+  }
+
+  // Div-level speech bubble (works in any slide, including section.speech).
+  .slides .speech-bubble {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: $comic-white;
+    color: $comic-ink;
+    border: $thick-ink-border;
+    border-radius: 32px;
+    padding: 0.8em 1.2em;
+    font-family: "Comic Neue", cursive;
+    font-weight: 700;
+    font-size: 1.3em;
+    box-shadow: $panel-shadow;
+    max-width: 80%;
+    z-index: 1;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -22px;
+      left: 28%;
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 22px solid $comic-white;
+      filter: drop-shadow(0 4px 0 $comic-ink);
+    }
+  }
+
+  // ===== .comic-stage (centring wrapper) =====
+  // comic.lua wraps the body of .speech/.action/.explosion slides in this div.
+  // Its display is never toggled by reveal.js, so flex centring holds through
+  // the page-turn transition instead of snapping when `.present` lands.
+  // Filled absolutely: the section keeps `min-height: 100%` but its `height`
+  // stays `auto`, so a percentage height on the child would not resolve; an
+  // absolutely-positioned `inset: 0` child fills the section reliably.
+  .slides section .comic-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    gap: 0.6em;
+    text-align: center;
+    padding: 8%;
+
+    // Keep full-width children spanning despite align-items: center.
+    > .columns { align-self: stretch; }
+  }
+
+  // Keep speech body text inside the rounded bubble (inset 12% top/bottom,
+  // 6% sides) drawn by section.speech::before.
+  .slides section.speech .comic-stage {
+    padding: 16% 12%;
+  }
+
+  // ===== .comic-fit (auto-shrink wrapper) =====
+  // comic.lua wraps each slide's body in this element so the comic-fit plugin
+  // has one node per slide to measure and scale. The plugin reads slide
+  // overflow and sets --comic-fit-scale; the transform shrinks the content to
+  // fit the class's inner box without touching the <section>, so the
+  // pseudo-element frames and the page-turn rotateY stay intact. The default
+  // scale is 1, so the wrapper is inert until the plugin runs and harmless with
+  // JS off. Keep this transform out of the page-turn transition so scale snaps.
+  .slides section .comic-fit {
+    transform: scale(var(--comic-fit-scale, 1));
+    transform-origin: top left;
+    will-change: transform;
+  }
+
+  // Stage slides centre their content in the bubble / burst; shrink toward the
+  // centre so it stays centred. (.comic-stage is absolute inset: 0.)
+  .slides section .comic-stage.comic-fit {
+    transform-origin: center center;
+  }
+
+  // .section is centre-aligned; shrink toward the top centre, under the title.
+  .slides section.section .comic-fit {
+    transform-origin: top center;
+  }
+
+  // ===== .halftone modifier (composable) =====
+  // Keep text legible by giving textual content a paper-coloured chip
+  // backdrop. Headings get an inline yellow box; body text gets a
+  // semi-opaque paper backdrop.
+  .slides section.halftone {
+    @include halftone-bg;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 4% 6%;
+
+    h1, h2, h3, h4, h5, h6 {
+      background: $comic-yellow;
+      color: $comic-ink;
+      text-shadow: none;
+      display: inline-block;
+      padding: 0.1em 0.4em;
+      border: $ink-border;
+      box-shadow: 4px 4px 0 $comic-ink;
+    }
+
+    p, ul, ol, blockquote, pre, div.sourceCode {
+      background: rgba(253, 246, 227, 0.92);
+      padding: 0.3em 0.6em;
+      border-radius: 4px;
+      width: fit-content;
+      max-width: 100%;
+      box-sizing: border-box;
+      transition: background-color 500ms ease-out;
+    }
+
+    // Hold the paper backdrop back until the fragment is revealed, so the
+    // chip appears together with its text rather than as an empty box.
+    :is(p, ul, ol, blockquote, pre, div.sourceCode):has(.fragment:not(.visible)) {
+      background-color: transparent;
+    }
+  }
+
+  // ===== .halftone compositions =====
+  // When .halftone combines with another slide-level class, ensure dots
+  // remain visible behind that class's own chrome. Source order (this block
+  // sits after every slide-level rule) lets these selectors win.
+
+  // .panel.halftone: replace the white card background with halftone dots
+  // so the inked card itself reads as halftoned paper.
+  .slides section.panel.halftone::before {
+    @include halftone-bg;
+  }
+
+  // .section.halftone: keep the starburst by layering it over halftone dots.
+  .slides section.section.halftone {
+    background:
+      $starburst-yellow,
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 0 0 / 22px 22px,
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 11px 11px / 22px 22px,
+      $comic-paper;
+    background-repeat: no-repeat, repeat, repeat, repeat;
+    background-position: center, 0 0, 11px 11px, center;
+    background-size: 140% 140%, 22px 22px, 22px 22px, auto;
+  }
+
+  // .speech.halftone: leave bubble pseudos; halftone bg already applies.
+  // .action.halftone: keep the action burst; the radial gradient stays in
+  // place because its rule sits before this section, but we explicitly
+  // overlay dots between the burst and the paper.
+  .slides section.action.halftone {
+    background:
+      radial-gradient(circle closest-side at center, $comic-yellow 0%, $comic-yellow 38%, $comic-red 40%, $comic-red 72%, transparent 85%),
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 0 0 / 22px 22px,
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 11px 11px / 22px 22px,
+      $comic-paper;
+    background-repeat: no-repeat, repeat, repeat, repeat;
+    background-position: center, 0 0, 11px 11px, center;
+    background-size: 100% 100%, 22px 22px, 22px 22px, auto;
+  }
+
+  // ===== Component restyling (panel scope) =====
+  // All component overrides below apply only inside .panel slides so plain
+  // slides, .action, .speech, .halftone, and the title slide keep their
+  // bespoke treatments.
+  .slides section.panel {
+
+    // ----- Tabsets (panel-tabset + Tabby) -----
+    .panel-tabset {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    ul.panel-tabset-tabby {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4em;
+      padding: 0;
+      margin: 0 0 -4px 0;
+      list-style: none;
+
+      li { margin: 0; padding: 0; }
+      li::before { content: none; }
+
+      a {
+        display: inline-block;
+        font-family: "Permanent Marker", cursive;
+        text-transform: uppercase;
+        background: $comic-white;
+        color: $comic-ink;
+        border: $ink-border;
+        padding: 0.15em 0.7em;
+        box-shadow: 4px 4px 0 $comic-ink;
+        text-decoration: none;
+        line-height: 1.2;
+
+        &:hover { background: lighten($comic-yellow, 8%); }
+        &:focus-visible { outline: 3px solid $comic-red; outline-offset: 2px; }
+      }
+
+      a[aria-selected="true"] {
+        background: $comic-yellow;
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 $comic-ink;
+      }
+    }
+
+    div.tab-content {
+      background: $comic-white;
+      border: $thick-ink-border;
+      box-shadow: $panel-shadow;
+      padding: 0.6em 1em;
+    }
+
+    // ----- Lists -----
+    ul, ol {
+      margin: 0.2em 0;
+      padding-left: 1.4em;
+    }
+
+    ul { list-style: none; }
+
+    ul > li {
+      position: relative;
+      padding-left: 0.2em;
+      margin: 0.15em 0;
+    }
+
+    ul > li::before {
+      content: "\2605";
+      position: absolute;
+      left: -1.1em;
+      top: 0;
+      color: $comic-yellow;
+      text-shadow:
+        1px 0 0 $comic-ink,
+        -1px 0 0 $comic-ink,
+        0 1px 0 $comic-ink,
+        0 -1px 0 $comic-ink;
+      font-size: 0.95em;
+      line-height: 1.4;
+      transition: opacity 400ms ease-out;
+    }
+
+    ul ul > li::before {
+      content: "\25B8";
+      color: $comic-red;
+      text-shadow: none;
+      font-size: 0.9em;
+    }
+
+    ol {
+      list-style: decimal;
+
+      li {
+        margin: 0.15em 0;
+
+        &::marker {
+          color: $comic-red;
+          font-family: "Bangers", "Impact", sans-serif;
+          font-weight: 700;
+        }
+      }
+    }
+
+    // Hold the marker back until the item's fragment is revealed, so the
+    // marker appears together with its text rather than ahead of it.
+    ul > li:has(.fragment:not(.visible))::before { opacity: 0; }
+    ol > li:has(.fragment:not(.visible))::marker { color: transparent; }
+
+    // ----- Blockquote -----
+    blockquote {
+      position: relative;
+      background: $comic-white;
+      color: $comic-ink;
+      border: $ink-border;
+      border-left: 12px solid $comic-yellow;
+      box-shadow: $panel-shadow;
+      padding: 0.4em 0.9em 0.4em 1.6em;
+      margin: 0.4em 0;
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+      font-style: italic;
+
+      &::before {
+        content: "\201C";
+        position: absolute;
+        left: 0.15em;
+        top: -0.15em;
+        font-family: "Bangers", "Impact", sans-serif;
+        color: $comic-red;
+        font-size: 2.4em;
+        line-height: 1;
+        font-style: normal;
+      }
+
+      p { margin: 0.1em 0; }
+
+      p:last-child {
+        font-family: "Permanent Marker", cursive;
+        font-style: normal;
+        font-size: 0.85em;
+        margin-top: 0.3em;
+      }
+
+      p:only-child { font-family: inherit; font-style: italic; font-size: inherit; }
+    }
+
+    // ----- Quarto layout panels -----
+    div.quarto-layout-panel {
+      margin: 0.4em 0;
+    }
+
+    div.quarto-layout-row {
+      gap: 0.8em;
+    }
+
+    div.quarto-layout-cell {
+      padding: 0;
+    }
+
+    // ----- Callouts -----
+    div.callout {
+      background: $comic-paper;
+      border: $ink-border;
+      border-radius: 0;
+      box-shadow: $panel-shadow;
+      margin: 0.4em 0;
+      overflow: hidden;
+    }
+
+    div.callout > .callout-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    div.callout-title {
+      background: $comic-yellow;
+      padding: 0.2em 0.6em;
+      border-bottom: $ink-border;
+      font-family: "Bangers", "Impact", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+
+      p, strong { margin: 0; color: inherit; font-weight: 400; }
+    }
+
+    // Recolour callout icons to match title text colour.
+    // Quarto ships per-variant icons as background-image SVGs with hardcoded
+    // fill. We swap to mask-image + background-color: currentColor so the
+    // icon inherits the title's color.
+    div.callout .callout-icon::before {
+      background-image: none;
+      background-color: currentColor;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-image: var(--comic-callout-icon);
+      mask-image: var(--comic-callout-icon);
+    }
+
+    div.callout-note {
+      --comic-callout-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+    }
+
+    div.callout-tip {
+      --comic-callout-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1 .5.5 0 0 1-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/></svg>');
+    }
+
+    div.callout-warning {
+      --comic-callout-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/></svg>');
+    }
+
+    div.callout-caution {
+      --comic-callout-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M9.97 4.88l.953 3.811C10.158 8.878 9.14 9 8 9c-1.14 0-2.159-.122-2.923-.309L6.03 4.88C6.635 4.957 7.3 5 8 5s1.365-.043 1.97-.12zm-.245-.978L8.97.88C8.718-.13 7.282-.13 7.03.88L6.274 3.9C6.8 3.965 7.382 4 8 4c.618 0 1.2-.036 1.725-.098zm4.396 8.613a.5.5 0 0 1 .037.96l-6 2a.5.5 0 0 1-.316 0l-6-2a.5.5 0 0 1 .037-.96l2.391-.598.565-2.257c.862.212 1.964.339 3.165.339s2.303-.127 3.165-.339l.565 2.257 2.391.598z"/></svg>');
+    }
+
+    div.callout-important {
+      --comic-callout-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>');
+    }
+
+    div.callout-content {
+      padding: 0.4em 0.8em;
+      background: $comic-white;
+
+      p:last-child { margin-bottom: 0; }
+    }
+
+    div.callout-note > .callout-body > .callout-title { background: $comic-blue; color: $comic-white; }
+    div.callout-note > .callout-body > .callout-title p,
+    div.callout-note > .callout-body > .callout-title strong { color: $comic-white; }
+
+    div.callout-tip > .callout-body > .callout-title { background: $comic-yellow; color: $comic-ink; }
+
+    div.callout-important > .callout-body > .callout-title { background: $comic-red; color: $comic-yellow; }
+    div.callout-important > .callout-body > .callout-title p,
+    div.callout-important > .callout-body > .callout-title strong { color: $comic-yellow; }
+
+    div.callout-warning { border-color: $comic-red; }
+    div.callout-warning > .callout-body > .callout-title { background: $comic-yellow; color: $comic-ink; border-bottom-color: $comic-red; }
+
+    div.callout-caution > .callout-body > .callout-title { background: $comic-red; color: $comic-white; }
+    div.callout-caution > .callout-body > .callout-title p,
+    div.callout-caution > .callout-body > .callout-title strong { color: $comic-white; }
+
+    // ----- Tables -----
+    table.caption-top,
+    table {
+      border-collapse: collapse;
+      border: $ink-border;
+      background: $comic-white;
+      box-shadow: $panel-shadow;
+      margin: 0.3em auto;
+      width: auto;
+      max-width: 100%;
+
+      thead tr,
+      tr.header {
+        background: $comic-yellow;
+      }
+
+      th {
+        font-family: "Bangers", "Impact", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        padding: 0.2em 0.6em;
+        border: 2px solid $comic-ink;
+        color: $comic-ink;
+        text-shadow: none;
+      }
+
+      td {
+        padding: 0.15em 0.6em;
+        border: 2px solid $comic-ink;
+      }
+
+      tbody tr.odd { background: $comic-paper; }
+      tbody tr.even { background: $comic-white; }
+
+      td code {
+        background: transparent;
+        padding: 0;
+      }
+    }
+
+    // ----- Figures and float captions -----
+    figcaption.quarto-float-caption,
+    figcaption.quarto-float-caption-top,
+    figure > figcaption,
+    p.caption {
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+      font-style: italic;
+      background: $comic-white;
+      color: $comic-ink;
+      border: 3px solid $comic-ink;
+      padding: 0.15em 0.7em;
+      display: inline-block;
+      margin: 0.2em 0;
+      font-size: 0.85em;
+    }
+
+    // ----- Cross-reference and citation links -----
+    a.quarto-xref,
+    a[role="doc-biblioref"] {
+      color: $comic-red;
+      font-weight: 700;
+      text-decoration-thickness: 2px;
+
+      &:hover { color: $comic-blue; }
+    }
+
+    // ----- CSL bibliography -----
+    div.references.csl-bib-body {
+      font-size: 0.75em;
+    }
+
+    div.csl-entry {
+      background: $comic-white;
+      border-left: 6px solid $comic-yellow;
+      // Left gutter holds Quarto's hanging indent so the first line clears the
+      // yellow bar; margin overrides Quarto's box-shifting margin-left: 2em.
+      padding: 0.2em 0.6em 0.2em 2.6em;
+      margin: 0.3em 0;
+      text-indent: -2em;
+    }
+  }
+
+  // ===== Fragments (comic-styled progressive reveals) =====
+  // Reveal.js toggles .visible on revealed fragments and .current-fragment
+  // on the one currently focused. Each custom fragment ships with a
+  // transition that complements its starting transform/filter state.
+
+  .fragment.comic-pop {
+    opacity: 0;
+    transform: scale(0.4) rotate(-6deg);
+    transition:
+      opacity 400ms ease-out,
+      transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &.visible {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+    }
+  }
+
+  .fragment.ink-splat {
+    opacity: 0;
+    transform: scale(0.2) rotate(-25deg);
+    filter: blur(8px);
+    transition:
+      opacity 500ms ease-out,
+      transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 500ms ease-out;
+
+    &.visible {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+      filter: blur(0);
+    }
+  }
+
+  .fragment.halftone-wipe {
+    opacity: 0;
+    -webkit-mask-image: radial-gradient(circle, $comic-ink 35%, transparent 60%);
+    mask-image: radial-gradient(circle, $comic-ink 35%, transparent 60%);
+    -webkit-mask-size: 0% 0%;
+    mask-size: 0% 0%;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    transition:
+      opacity 500ms ease-out,
+      -webkit-mask-size 600ms ease-out,
+      mask-size 600ms ease-out;
+
+    &.visible {
+      opacity: 1;
+      -webkit-mask-size: 220% 220%;
+      mask-size: 220% 220%;
+    }
+  }
+
+  .fragment.zap-highlight {
+    opacity: 0;
+    background: transparent;
+    padding: 0 0.15em;
+    transition:
+      opacity 350ms ease-out,
+      background-color 350ms ease-out,
+      transform 350ms ease-out;
+
+    &.visible {
+      opacity: 1;
+    }
+
+    &.current-fragment {
+      background: $comic-yellow;
+      color: $comic-ink;
+      transform: rotate(-2deg);
+      box-shadow: 4px 4px 0 $comic-ink;
+    }
+  }
+
+  // ===== Callout fragments (boom / bam shortcodes) =====
+  // When a callout opts into `fragment=`, it reveals on click. The shared
+  // .visible end-state forces the callout to settle at its configured angle
+  // (--callout-rotate) so the `pop`/`splat` variants land rotated instead of
+  // at rotate(0). Placed after the generic fragment rules above so this wins
+  // the equal-specificity tie by source order.
+  .boom-callout.fragment.callout-burst,
+  .action-callout.fragment.callout-burst {
+    opacity: 0;
+    transition:
+      opacity 280ms ease-out,
+      transform 360ms cubic-bezier(0.34, 1.7, 0.5, 1);
+  }
+  .boom-callout.fragment.callout-burst {
+    transform: scale(0.3) rotate(calc(var(--callout-rotate, -6deg) - 14deg));
+  }
+  .action-callout.fragment.callout-burst {
+    transform: scale(0.3) rotate(calc(var(--callout-rotate, -4deg) - 14deg));
+  }
+
+  .boom-callout.fragment.visible {
+    opacity: 1;
+    transform: scale(1) rotate(var(--callout-rotate, -6deg));
+  }
+  .action-callout.fragment.visible {
+    opacity: 1;
+    transform: scale(1) rotate(var(--callout-rotate, -4deg));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .boom-callout.fragment,
+    .action-callout.fragment {
+      transform: none;
+
+      &.visible {
+        transform: rotate(var(--callout-rotate, 0deg));
+      }
+    }
+  }
+
+  // ===== .explosion =====
+  // Climax slide. Layered radial gradient burst behind a clip-path star
+  // outline drawn via a pseudo-element. Composes with .halftone.
+  .slides section.explosion {
+    text-align: center;
+    overflow: hidden;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 6%;
+    background:
+      radial-gradient(circle closest-side at center,
+        $comic-yellow 0%,
+        $comic-yellow 32%,
+        $comic-red 34%,
+        $comic-red 72%,
+        transparent 88%),
+      $comic-paper;
+    background-size: 100% 100%, auto;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 5%;
+      background: $comic-ink;
+      clip-path: polygon(
+        50% 0%,
+        58% 20%,
+        80% 12%,
+        72% 32%,
+        96% 38%,
+        78% 50%,
+        96% 64%,
+        72% 70%,
+        82% 90%,
+        58% 80%,
+        50% 100%,
+        42% 80%,
+        18% 90%,
+        28% 70%,
+        4% 64%,
+        22% 50%,
+        4% 38%,
+        28% 32%,
+        20% 12%,
+        42% 20%
+      );
+      z-index: 0;
+      opacity: 0.18;
+    }
+
+    h1, h2, p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      line-height: 1;
+      font-family: "Bangers", "Impact", sans-serif;
+      font-size: 3.2em;
+      color: $comic-yellow;
+      letter-spacing: 0.04em;
+      transform: rotate(-3deg);
+      text-shadow:
+        3px 0 0 $comic-ink,
+        -3px 0 0 $comic-ink,
+        0 3px 0 $comic-ink,
+        0 -3px 0 $comic-ink,
+        6px 6px 0 $comic-red;
+    }
+  }
+
+  // .explosion.halftone composition: keep the burst, overlay dots.
+  .slides section.explosion.halftone {
+    background:
+      radial-gradient(circle closest-side at center,
+        $comic-yellow 0%,
+        $comic-yellow 32%,
+        $comic-red 34%,
+        $comic-red 72%,
+        transparent 88%),
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 0 0 / 22px 22px,
+      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 11px 11px / 22px 22px,
+      $comic-paper;
+    background-repeat: no-repeat, repeat, repeat, repeat;
+    background-position: center, 0 0, 11px 11px, center;
+    background-size: 100% 100%, 22px 22px, 22px 22px, auto;
+  }
+
+  // ===== {{< boom >}} shortcode =====
+  // Inline jagged spike-burst. The text sits over a yellow star polygon
+  // (via clip-path) with an ink outline drawn through filter drop-shadows
+  // (border + box-shadow don't follow clip-path).
+  div.boom-callout {
+    display: inline-block;
+    font-family: "Bangers", "Impact", sans-serif;
+    font-size: 2.4em;
+    line-height: 1;
+    padding: 0.6em 0.9em;
+    text-align: center;
+    transform: rotate(var(--callout-rotate, -6deg));
+    color: $comic-ink;
+    background: $comic-yellow;
+    clip-path: polygon(
+      50% 0%,
+      58% 18%,
+      82% 10%,
+      72% 30%,
+      96% 38%,
+      78% 50%,
+      96% 64%,
+      72% 70%,
+      82% 90%,
+      58% 80%,
+      50% 100%,
+      42% 80%,
+      18% 90%,
+      28% 70%,
+      4% 64%,
+      22% 50%,
+      4% 38%,
+      28% 30%,
+      18% 10%,
+      42% 18%
+    );
+    filter:
+      drop-shadow(2px 0 0 $comic-ink)
+      drop-shadow(-2px 0 0 $comic-ink)
+      drop-shadow(0 2px 0 $comic-ink)
+      drop-shadow(0 -2px 0 $comic-ink)
+      drop-shadow(6px 6px 0 rgba(0, 0, 0, 0.35));
+    z-index: 5;
+
+    .boom-text {
+      display: inline-block;
+      transform: rotate(0deg);
+      letter-spacing: 0.03em;
+    }
+  }
+
+  div.boom-callout.boom-yellow { background: $comic-yellow; color: $comic-ink; }
+  div.boom-callout.boom-red    { background: $comic-red;    color: $comic-yellow; }
+  div.boom-callout.boom-blue   { background: $comic-blue;   color: $comic-yellow; }
+
+  // ===== Bubble variants (div-level dialogue) =====
+  // Authored as :::{.thought} / .shout / .whisper / .narration. The
+  // comic.lua filter wraps each in <div class="bubble-<variant>">. Each
+  // variant carries its own shape, font, and tail.
+
+  .slides .bubble-thought {
+    position: relative;
+    display: inline-block;
+    background: $comic-white;
+    color: $comic-ink;
+    border: $thick-ink-border;
+    border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+    padding: 0.9em 1.4em;
+    margin: 1em 0 2em 0;
+    max-width: 80%;
+    font-family: "Comic Neue", "Comic Sans MS", cursive;
+    font-style: italic;
+    font-weight: 700;
+    box-shadow: $panel-shadow;
+    z-index: 1;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      background: $comic-white;
+      border: $thick-ink-border;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    &::before {
+      width: 22px;
+      height: 22px;
+      left: 18%;
+      bottom: -28px;
+    }
+
+    &::after {
+      width: 12px;
+      height: 12px;
+      left: 12%;
+      bottom: -48px;
+    }
+  }
+
+  .slides .bubble-shout {
+    position: relative;
+    display: inline-block;
+    background: $comic-yellow;
+    color: $comic-red;
+    padding: 0.8em 1.6em;
+    margin: 0.6em 0;
+    max-width: 85%;
+    font-family: "Bangers", "Impact", sans-serif;
+    text-transform: uppercase;
+    font-size: 1.4em;
+    letter-spacing: 0.04em;
+    transform: rotate(-2deg);
+    clip-path: polygon(
+      0% 12%,
+      8% 0%,
+      18% 10%,
+      28% 0%,
+      40% 8%,
+      50% 0%,
+      62% 10%,
+      72% 0%,
+      82% 12%,
+      94% 4%,
+      100% 18%,
+      94% 30%,
+      100% 44%,
+      92% 56%,
+      100% 68%,
+      94% 82%,
+      100% 94%,
+      88% 100%,
+      76% 92%,
+      64% 100%,
+      52% 92%,
+      40% 100%,
+      28% 92%,
+      16% 100%,
+      4% 92%,
+      0% 78%,
+      6% 64%,
+      0% 50%,
+      6% 36%,
+      0% 24%
+    );
+    filter:
+      drop-shadow(2px 0 0 $comic-ink)
+      drop-shadow(-2px 0 0 $comic-ink)
+      drop-shadow(0 2px 0 $comic-ink)
+      drop-shadow(0 -2px 0 $comic-ink)
+      drop-shadow(5px 5px 0 rgba(0, 0, 0, 0.35));
+    text-shadow:
+      1px 1px 0 $comic-ink,
+      -1px 1px 0 $comic-ink,
+      1px -1px 0 $comic-ink,
+      -1px -1px 0 $comic-ink;
+  }
+
+  .slides .bubble-whisper {
+    position: relative;
+    display: inline-block;
+    background: $comic-white;
+    color: rgba(11, 11, 11, 0.7);
+    border: 3px dashed $comic-ink;
+    border-radius: 24px;
+    padding: 0.5em 1em;
+    margin: 0.6em 0 1.4em 0;
+    max-width: 75%;
+    font-family: "Comic Neue", "Comic Sans MS", cursive;
+    font-style: italic;
+    font-size: 0.9em;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -14px;
+      left: 28%;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 14px dashed $comic-ink;
+      filter: drop-shadow(0 1px 0 $comic-ink);
+    }
+  }
+
+  .slides .bubble-narration {
+    display: block;
+    width: fit-content;
+    max-width: 90%;
+    background: $comic-yellow;
+    color: $comic-ink;
+    border: $ink-border;
+    box-shadow: $panel-shadow;
+    padding: 0.4em 0.9em;
+    margin: 0.4em 0;
+    font-family: "Permanent Marker", cursive;
+    font-size: 1em;
+    line-height: 1.3;
+  }
+
+  // ===== Page-turn slide transition =====
+  // Book-page flip: each section is hinged at one vertical edge and
+  // rotates around it like a turning page. Reveal's `transition: slide`
+  // in the format YAML drives the display/visibility timing; the
+  // selectors below override Reveal's translate-based transforms with a
+  // rotateY hinge. Forward navigation reads as a page turning from right
+  // to left (future enters from the right, past rotates away to the
+  // left). The `.present` section is untouched so Reveal's positioning
+  // is preserved.
+  &:not(.print-pdf) .slides {
+    perspective: 1800px;
+    perspective-origin: 50% 50%;
+  }
+
+  &:not(.print-pdf) .slides > section,
+  &:not(.print-pdf) .slides > section > section {
+    transition:
+      transform 700ms ease-in-out,
+      opacity 600ms ease-in-out !important;
+    backface-visibility: hidden;
+  }
+
+  // Past section (forward navigation): hinges around its left edge and
+  // rotates -100deg, lifting away to the left.
+  &.slide:not(.overview) .slides > section:not([data-transition]).past,
+  &.slide:not(.overview) .slides > section:not([data-transition]).stack.past,
+  &:not(.overview) .slides > section[data-transition~="slide-out"].past,
+  &:not(.overview) .slides > section.past {
+    transform: rotateY(-100deg) !important;
+    transform-origin: left center !important;
+    opacity: 0 !important;
+  }
+
+  // Future section (forward navigation): waits hinged on its right edge
+  // at +100deg, then rotates in to settle at 0deg as the page lands.
+  &.slide:not(.overview) .slides > section:not([data-transition]).future,
+  &.slide:not(.overview) .slides > section:not([data-transition]).stack.future,
+  &:not(.overview) .slides > section[data-transition~="slide-in"].future,
+  &:not(.overview) .slides > section.future {
+    transform: rotateY(100deg) !important;
+    transform-origin: right center !important;
+    opacity: 0 !important;
+  }
+
+  // Vertical (nested) sections use the same right-to-left page flip as
+  // horizontal navigation — no rotateX. Authors get one consistent motion
+  // throughout the deck.
+  &:not(.overview) .slides > section > section.past {
+    transform: rotateY(-100deg) !important;
+    transform-origin: left center !important;
+  }
+
+  &:not(.overview) .slides > section > section.future {
+    transform: rotateY(100deg) !important;
+    transform-origin: right center !important;
+  }
+
+  // ===== Scroll floor (comic-fit fallback) =====
+  // When the comic-fit plugin cannot shrink a slide enough to fit (content
+  // would fall below the minimum scale), it tags the slide so the inner box
+  // scrolls instead of cropping. Placed after the slide-level overflow: hidden
+  // rules so it wins the tie and re-enables scrolling. Flow slides scroll their
+  // inner .comic-fit wrapper (so the section can stay overflow:visible and the
+  // hanging chip/caption are not clipped); stage slides scroll the absolute
+  // .comic-stage child.
+  .slides section.comic-fit-scroll .comic-stage {
+    overflow: auto;
+  }
+
+  // Flow slides: keep the section overflow visible so the heading chip (negative
+  // left margin) and the pinned caption hang past the card; scroll the inner
+  // wrapper (bounded to a px height by the comic-fit plugin). Reserve bottom
+  // space so scrolled content clears the corner-pinned caption.
+  .slides section.comic-fit-scroll {
+    overflow: visible;
+  }
+
+  .slides section.comic-fit-scroll > .comic-fit:not(.comic-stage) {
+    overflow: auto;
+    max-height: calc(100% - 3.5em);
+    padding-bottom: 2.8em;
+  }
+
+  // Panel + Quarto .scrollable: the comic-fit plugin skips .scrollable, so this
+  // is CSS-only. Give the section a definite height so the wrapper's max-height
+  // resolves (reveal sections are height:auto with only min-height:100%). Keep
+  // section overflow visible so the chip and the pinned caption hang past the
+  // card; scroll the wrapper, reserving the chip above and the caption below.
+  .slides section.panel.scrollable {
+    overflow: visible;
+    height: 100%;
+  }
+
+  .slides section.panel.scrollable > .comic-fit {
+    overflow: auto;
+    max-height: calc(100% - 3em);
+    padding-bottom: 2.8em;
+  }
+
+  // ===== Scrollable slide scrollbar (comic ink) =====
+  // Quarto's .scrollable falls back to native scrollbars on overflow, as does
+  // the comic-fit scroll floor above. Style them in the comic palette so even
+  // the overflow case stays on-theme.
+  .slides section.scrollable,
+  .slides section.panel.scrollable > .comic-fit,
+  .slides section.comic-fit-scroll > .comic-fit:not(.comic-stage),
+  .slides section.comic-fit-scroll,
+  .slides section.comic-fit-scroll .comic-stage {
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $comic-paper;
+      border-left: 2px solid $comic-ink;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $comic-ink;
+      border-radius: 0;
+      border: 2px solid $comic-paper;
+    }
+
+    scrollbar-color: $comic-ink $comic-paper;
+    scrollbar-width: thin;
+  }
+
+  // ===== Chrome (menu button + slide number) =====
+  // The Reveal-menu plugin emits a hamburger button bottom-left and Reveal
+  // emits a slide-number readout bottom-right. Style both as comic chips.
+
+  // Menu button: round yellow stamp with ink border, lightning-bolt icon.
+  // Circular so it reads as an action control, not a second page-number chip.
+  .slide-menu-button {
+    background: $comic-yellow !important;
+    border: 3px solid $comic-ink !important;
+    box-shadow: 3px 3px 0 $comic-ink !important;
+    border-radius: 50% !important;
+    width: 2.1em;
+    height: 2.1em;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-2deg);
+
+    &:hover {
+      background: lighten($comic-yellow, 6%) !important;
+      transform: rotate(-2deg) translate(-1px, -1px);
+    }
+
+    .fas, .fa {
+      color: $comic-ink !important;
+    }
+
+    .fas.fa-bars::before,
+    .fa.fa-bars::before {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="%230b0b0b" d="M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.25 1.25 0 0 1-.871.354h-.302a1.25 1.25 0 0 1-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004zm1.047 1.074L3.286 8.571A.25.25 0 0 0 3.462 9H6.75a.75.75 0 0 1 .694 1.034l-1.713 4.188l6.982-6.793A.25.25 0 0 0 12.538 7H9.25a.75.75 0 0 1-.683-1.06l2.008-4.418l.003-.006l-.004-.009l-.006-.006l-.008-.001q-.005 0-.009.004"/></svg>');
+      background-color: transparent;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  // Slide-menu dropdown panel.
+  .slide-menu-wrapper {
+    background: $comic-paper !important;
+    border: $thick-ink-border;
+    box-shadow: $panel-shadow;
+    color: $comic-ink !important;
+
+    .slide-menu-items,
+    .slide-menu-toolbar {
+      background: transparent !important;
+    }
+
+    .slide-menu-item,
+    .slide-tool-item {
+      color: $comic-ink !important;
+      border-top-color: rgba(11, 11, 11, 0.2) !important;
+      font-family: "Comic Neue", "Comic Sans MS", cursive;
+
+      &:hover,
+      &.active {
+        background: $comic-yellow !important;
+        color: $comic-ink !important;
+      }
+    }
+
+    h1, h2, h3 {
+      font-family: "Bangers", "Impact", sans-serif;
+      color: $comic-ink !important;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    kbd {
+      background: $comic-yellow !important;
+      color: $comic-ink !important;
+      border-color: $comic-ink !important;
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+    }
+  }
+
+  // Slide number readout.
+  .slide-number {
+    background: $comic-paper !important;
+    color: $comic-ink !important;
+    border: $ink-border;
+    box-shadow: 3px 3px 0 $comic-ink;
+    padding: 0.15em 0.6em !important;
+    font-family: "Bangers", "Impact", sans-serif !important;
+    font-size: 0.7em !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    bottom: 12px;
+    right: 12px;
+    border-radius: 0 !important;
+    transform: rotate(-2deg);
+
+    a {
+      color: $comic-ink !important;
+      text-decoration: none !important;
+    }
+  }
+
+  // Hide chrome on the comic cover slide; it reappears on every other slide.
+  &.comic-on-cover {
+    .slide-logo,
+    .slide-menu-button,
+    .slide-number {
+      display: none !important;
+    }
+  }
+
+  // Hide chrome in print/PDF export.
+  body.print-pdf & .slide-number,
+  body.print-pdf & .slide-menu-button {
+    display: none !important;
+  }
+
+  // Never shrink content in print/PDF export; reveal.js paginates static pages
+  // at natural size. Belt-and-suspenders with the plugin's print early-return.
+  &.print-pdf .comic-fit,
+  body.print-pdf & .comic-fit {
+    transform: none !important;
+  }
+}

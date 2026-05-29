@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Comic burst logo">
+  <polygon
+    points="60,4 70,28 96,18 86,42 116,46 92,62 116,80 88,82 96,108 70,92 60,116 50,92 24,108 32,82 4,80 28,62 4,46 34,42 24,18 50,28"
+    fill="#ffd60a" stroke="#0b0b0b" stroke-width="5" stroke-linejoin="round"/>
+  <text x="60" y="78" font-family="Impact, 'Bangers', sans-serif" font-size="56" fill="#e63946" text-anchor="middle" stroke="#0b0b0b" stroke-width="2">C</text>
+</svg>

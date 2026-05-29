@@ -1,0 +1,15 @@
+# _schema.yml for the "comic" Reveal.js format extension.
+# Describes format-specific options for IDE tooling and runtime validation.
+
+$schema: https://m.canouil.dev/quarto-wizard/assets/schema/v2/extension-schema.json
+
+# The comic format inherits all standard Reveal.js options.
+# Authoring uses semantic per-slide classes rather than YAML options:
+#   - .title-slide  (auto-applied to the cover slide)
+#   - .section      (chapter splash)
+#   - .panel        (single comic panel)
+#   - .action       (BAM / POW / ZAP slide)
+#   - .speech       (speech bubble; SVG tail injected by the filter)
+#   - .halftone     (Ben Day dots modifier; composable)
+formats:
+  comic-revealjs: {}
