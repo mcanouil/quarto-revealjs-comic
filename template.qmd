@@ -56,7 +56,7 @@ Signal projection over the skyline.
 
 The signal in @fig-signal calls our hero into action.
 
-::: {.caption}
+::: {.caption .fragment}
 `.panel` slide with a cross-referenced figure.
 :::
 
