@@ -23,16 +23,16 @@ local function numeric(s, suffix)
 end
 
 --- Colours both callouts accept; unknown values fall back to the default.
-M.valid_colours = { yellow = true, red = true, blue = true }
+local valid_colours = { yellow = true, red = true, blue = true }
 
 --- Pick a whitelisted colour from the kwargs, or the supplied default.
 --- @param kwargs table Shortcode kwargs.
 --- @param default string Fallback colour name.
 --- @return string
-function M.pick_colour(kwargs, default)
+local function pick_colour(kwargs, default)
   if kwargs and kwargs["colour"] then
     local requested = pandoc.utils.stringify(kwargs["colour"])
-    if M.valid_colours[requested] then
+    if valid_colours[requested] then
       return requested
     end
   end
@@ -42,7 +42,7 @@ end
 --- Validate a CSS length value (e.g. 10%, 40px, 2em). Returns the string or nil.
 --- @param value any
 --- @return string|nil
-function M.safe_length(value)
+local function safe_length(value)
   if not value then
     return nil
   end
@@ -60,7 +60,7 @@ end
 --- for anything else.
 --- @param value any
 --- @return string|nil
-function M.safe_angle(value)
+local function safe_angle(value)
   if not value then
     return nil
   end
@@ -77,7 +77,7 @@ end
 --- Validate a non-negative integer fragment index. Returns the string or nil.
 --- @param value any
 --- @return string|nil
-function M.safe_index(value)
+local function safe_index(value)
   if not value then
     return nil
   end
@@ -106,7 +106,7 @@ local fragment_off = { ["false"] = true, ["off"] = true, ["no"] = true, ["0"] = 
 --- callout should not be a fragment.
 --- @param value any
 --- @return string|nil
-function M.fragment_class(value)
+local function fragment_class(value)
   if value == nil then
     return nil
   end
@@ -127,11 +127,11 @@ end
 --- configured angle). Returns "" when no style applies.
 --- @param kwargs table
 --- @return string
-function M.build_style(kwargs)
+local function build_style(kwargs)
   local parts = {}
   local positional = false
   for _, key in ipairs({ "top", "right", "bottom", "left" }) do
-    local v = M.safe_length(kwargs[key])
+    local v = safe_length(kwargs[key])
     if v then
       parts[#parts + 1] = key .. ":" .. v
       positional = true
@@ -140,11 +140,11 @@ function M.build_style(kwargs)
   if positional then
     table.insert(parts, 1, "position:absolute")
   end
-  local size = M.safe_length(kwargs["size"])
+  local size = safe_length(kwargs["size"])
   if size then
     parts[#parts + 1] = "font-size:" .. size
   end
-  local angle = M.safe_angle(kwargs["rotate"])
+  local angle = safe_angle(kwargs["rotate"])
   if angle then
     parts[#parts + 1] = "--callout-rotate:" .. angle
   end
@@ -164,15 +164,15 @@ end
 --- @return string data The ` data-fragment-index="N"` attribute string (or "").
 function M.attributes(base_class, colour_prefix, default_colour, kwargs)
   kwargs = kwargs or {}
-  local colour = M.pick_colour(kwargs, default_colour)
+  local colour = pick_colour(kwargs, default_colour)
   local classes = { base_class, colour_prefix .. "-" .. colour }
-  local fragment = M.fragment_class(kwargs["fragment"])
+  local fragment = fragment_class(kwargs["fragment"])
   if fragment then
     classes[#classes + 1] = "fragment"
     classes[#classes + 1] = fragment
   end
-  local style = M.build_style(kwargs)
-  local index = M.safe_index(kwargs["index"])
+  local style = build_style(kwargs)
+  local index = safe_index(kwargs["index"])
   local data = index and (' data-fragment-index="' .. index .. '"') or ""
   return table.concat(classes, " "), style, data
 end
