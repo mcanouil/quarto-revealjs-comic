@@ -1,0 +1,9 @@
+# Files excluded when this repository is consumed via `quarto use template`.
+# Only `_extensions/` and `template.qmd` reach a consumer's project.
+.github/
+.gitignore
+.quartoignore
+README.md
+CHANGELOG.md
+CITATION.cff
+LICENSE
