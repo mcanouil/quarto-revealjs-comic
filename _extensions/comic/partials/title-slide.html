@@ -1,0 +1,34 @@
+<section id="$idprefix$title-slide"$for(title-slide-attributes/pairs)$ $it.key$="$it.value$"$endfor$ class="title-slide quarto-title-block comic-cover" data-no-sound>
+  <div class="cover-decor" aria-hidden="true">
+    <div class="cover-rays"></div>
+    <div class="cover-stripes"></div>
+    <div class="cover-burst"></div>
+    <div class="cover-splat cover-splat--a"></div>
+    <div class="cover-splat cover-splat--b"></div>
+    <div class="cover-corner cover-corner--tl"></div>
+    <div class="cover-corner cover-corner--tr"></div>
+    <div class="cover-corner cover-corner--bl"></div>
+    <div class="cover-corner cover-corner--br"></div>
+  </div>
+
+  <div class="cover-content">
+    <div class="cover-title-block">
+      <h1 class="title">$title$</h1>
+      $if(subtitle)$
+      <p class="subtitle">$subtitle$</p>
+      $endif$
+    </div>
+
+    $if(by-author)$
+    <div class="cover-byline">
+      $for(by-author)$
+      <span class="cover-author">$if(by-author.name.literal)$$by-author.name.literal$$else$$by-author.name$$endif$</span>
+      $endfor$
+    </div>
+    $endif$
+
+    $if(date)$
+    <span class="cover-date">$date$</span>
+    $endif$
+  </div>
+</section>
