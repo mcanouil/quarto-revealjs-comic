@@ -123,8 +123,8 @@ Themed table and blockquote inside a `.panel`.
 
 ## Investigator's Notes {.panel}
 
-::: {.panel-tabset data-tab-active="1" data-tabset-skip-pdf-clone="true"}
-#### Narrative
+::: {.panel-tabset data-tabset-skip-pdf-clone="true"}
+#### Narrative {.active}
 
 [The hero arrives at the rooftop while the city still glows.]{.fragment .halftone-wipe}
 
