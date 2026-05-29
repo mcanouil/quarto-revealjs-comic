@@ -18,37 +18,38 @@ var RevealComicCover = window.RevealComicCover || (function () {
   var COVER_SELECTOR = "section.title-slide.comic-cover";
 
   // One-time: bleed the cover decor onto the full-viewport background layer.
-  function bleed(reveal) {
-    var root = reveal.getRevealElement();
-    if (!root) return;
-    var slide = root.querySelector(COVER_SELECTOR);
-    if (!slide) return;
-
-    var background = reveal.getSlideBackground(slide);
+  function bleed(reveal, cover) {
+    var background = reveal.getSlideBackground(cover);
     if (!background || background.querySelector(".cover-decor")) return;
 
-    var decor = slide.querySelector(".cover-decor");
+    var decor = cover.querySelector(".cover-decor");
     if (!decor) return;
 
     background.classList.add("comic-cover");
     background.appendChild(decor.cloneNode(true));
-    root.classList.add("comic-cover-bled");
-  }
-
-  // Per-slide: only the cover slide reveals the bled background.
-  function toggleOnCover(reveal) {
-    var root = reveal.getRevealElement();
-    if (!root) return;
-    var slide = root.querySelector(COVER_SELECTOR);
-    if (!slide) return;
-    root.classList.toggle("comic-on-cover", reveal.getCurrentSlide() === slide);
+    reveal.getRevealElement().classList.add("comic-cover-bled");
   }
 
   return {
     id: "comic-cover",
     init: function (reveal) {
-      reveal.on("ready", function () { bleed(reveal); toggleOnCover(reveal); });
-      reveal.on("slidechanged", function () { toggleOnCover(reveal); });
+      reveal.on("ready", function () {
+        var root = reveal.getRevealElement();
+        if (!root) return;
+        var cover = root.querySelector(COVER_SELECTOR);
+        if (!cover) return;
+
+        bleed(reveal, cover);
+
+        // Per-slide: only the cover slide reveals the bled background. The cover
+        // section is a stable node, so navigation just toggles the root class
+        // instead of re-querying the DOM on every slidechanged.
+        function toggleOnCover() {
+          root.classList.toggle("comic-on-cover", reveal.getCurrentSlide() === cover);
+        }
+        toggleOnCover();
+        reveal.on("slidechanged", toggleOnCover);
+      });
     }
   };
 })();
