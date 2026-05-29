@@ -1,15 +1,141 @@
-# _schema.yml for the "comic" Reveal.js format extension.
-# Describes format-specific options for IDE tooling and runtime validation.
-
+# Schema for the comic extension
 $schema: https://m.canouil.dev/quarto-wizard/assets/schema/v2/extension-schema.json
 
-# The comic format inherits all standard Reveal.js options.
-# Authoring uses semantic per-slide classes rather than YAML options:
-#   - .title-slide  (auto-applied to the cover slide)
-#   - .section      (chapter splash)
-#   - .panel        (single comic panel)
-#   - .action       (BAM / POW / ZAP slide)
-#   - .speech       (speech bubble; SVG tail injected by the filter)
-#   - .halftone     (Ben Day dots modifier; composable)
+shortcodes:
+  bam:
+    description: "Render an inline action callout as a skewed, ink-outlined comic burst."
+    arguments:
+      - name: text
+        type: string
+        default: "BAM!"
+        description: "Text shown inside the action callout."
+    attributes:
+      colour:
+        type: string
+        enum: [yellow, red, blue]
+        default: yellow
+        description: "Callout colour; unknown values fall back to the default."
+      top:
+        type: string
+        description: "CSS top offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "10%"
+      right:
+        type: string
+        description: "CSS right offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "8%"
+      bottom:
+        type: string
+        description: "CSS bottom offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "10%"
+      left:
+        type: string
+        description: "CSS left offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "8%"
+      rotate:
+        type: [string, number]
+        description: "Rotation angle; a bare number is treated as degrees, or pass an Ndeg value."
+        examples: [-15, 12, "10deg"]
+      size:
+        type: string
+        description: "CSS font-size value (e.g. 3em, 64px) overriding the default callout size."
+        completion:
+          type: freeform
+          placeholder: "3em"
+      fragment:
+        type: [string, boolean]
+        enum: [true, burst, pop, splat, false, "off", "no", 0]
+        description: "Reveal the callout as a Reveal.js fragment with the matching comic entrance; true maps to burst, and false/off/no/0 disable it."
+      index:
+        type: integer
+        minimum: 0
+        description: "Non-negative data-fragment-index ordering the callout among the slide's fragments."
+  boom:
+    description: "Render an inline explosion callout as a jagged spike-burst with the text clipped inside the star polygon."
+    arguments:
+      - name: text
+        type: string
+        default: "BOOM!"
+        description: "Text shown inside the explosion callout."
+    attributes:
+      colour:
+        type: string
+        enum: [yellow, red, blue]
+        default: red
+        description: "Callout colour; unknown values fall back to the default."
+      top:
+        type: string
+        description: "CSS top offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "12%"
+      right:
+        type: string
+        description: "CSS right offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "8%"
+      bottom:
+        type: string
+        description: "CSS bottom offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "12%"
+      left:
+        type: string
+        description: "CSS left offset (e.g. 10%, 40px, 2em); any offset switches the callout to absolute positioning."
+        completion:
+          type: freeform
+          placeholder: "8%"
+      rotate:
+        type: [string, number]
+        description: "Rotation angle; a bare number is treated as degrees, or pass an Ndeg value."
+        examples: [-10, 12, "10deg"]
+      size:
+        type: string
+        description: "CSS font-size value (e.g. 3em, 64px) overriding the default callout size."
+        completion:
+          type: freeform
+          placeholder: "3em"
+      fragment:
+        type: [string, boolean]
+        enum: [true, burst, pop, splat, false, "off", "no", 0]
+        description: "Reveal the callout as a Reveal.js fragment with the matching comic entrance; true maps to burst, and false/off/no/0 disable it."
+      index:
+        type: integer
+        minimum: 0
+        description: "Non-negative data-fragment-index ordering the callout among the slide's fragments."
+
 formats:
   comic-revealjs: {}
+
+classes:
+  speech:
+    description: "On a slide heading, a speech-bubble stage slide; on a div, wraps content in a speech bubble with an injected SVG tail."
+  thought:
+    description: "Wrap a div's content in a thought bubble."
+  shout:
+    description: "Wrap a div's content in a shout bubble."
+  whisper:
+    description: "Wrap a div's content in a whisper bubble."
+  narration:
+    description: "Wrap a div's content in a narration box."
+  section:
+    description: "Mark a level-1 or level-2 heading as a chapter splash, stamping a zero-padded chapter number and splitting the heading on the first colon into a banner and title."
+  panel:
+    description: "Style a slide as a single bordered comic panel."
+  halftone:
+    description: "Composable Ben Day halftone-dot modifier applied to a slide background."
+  action:
+    description: "Mark a slide as an action (BAM/POW) stage slide whose body is centred in a flexible comic stage."
+  explosion:
+    description: "Mark a slide as an explosion stage slide whose body is centred in a flexible comic stage."
+  caption:
+    description: "A trailing caption div pinned to the slide corner and left unscaled outside the fit wrapper."
