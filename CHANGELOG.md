@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- feat: enhance code-window styling for comic panels.
+
 ## 0.1.0 (2026-05-29)
 
 ### New Features
