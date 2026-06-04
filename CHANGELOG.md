@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0 (2026-06-04)
+
 - feat: enhance code-window styling for comic panels.
 - feat: centre content in comic panels with flexbox.
 - feat: enhance bleed functionality for comic cover.
