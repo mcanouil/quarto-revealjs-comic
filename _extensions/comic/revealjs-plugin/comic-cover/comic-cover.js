@@ -40,11 +40,16 @@ var RevealComicCover = window.RevealComicCover || (function () {
         if (!cover) return;
 
         bleed(reveal, cover);
+        requestAnimationFrame(function () { bleed(reveal, cover); });
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () { bleed(reveal, cover); });
+        }
 
         // Per-slide: only the cover slide reveals the bled background. The cover
         // section is a stable node, so navigation just toggles the root class
         // instead of re-querying the DOM on every slidechanged.
         function toggleOnCover() {
+          bleed(reveal, cover);
           root.classList.toggle("comic-on-cover", reveal.getCurrentSlide() === cover);
         }
         toggleOnCover();

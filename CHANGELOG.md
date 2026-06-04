@@ -4,6 +4,7 @@
 
 - feat: enhance code-window styling for comic panels.
 - feat: centre content in comic panels with flexbox.
+- feat: enhance bleed functionality for comic cover.
 
 ## 0.1.0 (2026-05-29)
 
