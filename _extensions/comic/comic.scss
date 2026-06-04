@@ -124,6 +124,40 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     background: $comic-white !important;
   }
 
+  // ===== code-window: match comic panel style =====
+  // Replaces code-window's thin rounded border with a flat ink frame.
+  // Suppresses the inner div.sourceCode border so the container is the single frame.
+  .code-with-filename {
+    margin: 0.5em 0;
+    border: $ink-border;
+    border-radius: 0;
+    box-shadow: $panel-shadow;
+
+    .code-with-filename-file {
+      background-color: $comic-paper;
+      border-bottom: $ink-border;
+
+      pre {
+        color: $comic-ink;
+        font-weight: 700;
+      }
+
+      .code-with-filename-lines {
+        color: $comic-ink;
+        background-color: $comic-yellow;
+        border-color: $comic-ink;
+      }
+    }
+
+    // Inner code block: container already carries the ink frame.
+    div.sourceCode,
+    .code-copy-outer-scaffold,
+    > pre {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
   code {
     background: $comic-yellow;
     color: $comic-ink;
