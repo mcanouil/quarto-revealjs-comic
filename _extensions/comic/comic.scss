@@ -785,6 +785,14 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     transform-origin: top center;
   }
 
+  // Panels keep their boxes (code, images, callouts, narration, tables)
+  // horizontally centred, so shrink toward the top centre rather than the top
+  // left; otherwise a down-scaled panel would drag its centred content into the
+  // left corner. Full-width text/lists still read flush-left because they span.
+  .slides section.panel .comic-fit {
+    transform-origin: top center;
+  }
+
   // ===== .halftone modifier (composable) =====
   // Keep text legible by giving textual content a paper-coloured chip
   // backdrop. Headings get an inline yellow box; body text gets a
@@ -866,14 +874,25 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   // bespoke treatments.
   .slides section.panel {
 
-    // ----- Content centering -----
-    // Turn the body wrapper into a flex column so each child is centred
-    // as a box. Full-width elements (text paragraphs, lists, columns,
-    // tabsets, layout panels, bibliography) opt out with align-self: stretch.
+    // ----- Content alignment -----
+    // Body wrapper is a flex column. Text, lists, columns, tabsets, layout
+    // panels, and bibliography span the full width (align-self: stretch), so
+    // their prose stays flush-left. Callouts, code blocks, and images are
+    // boxes that centre horizontally while their own inner text/code keeps its
+    // alignment. Everything else falls back to the flex-start default.
     .comic-fit {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
+
+      // The comic-fit plugin locks this wrapper's height to the scaled content
+      // height so the section flow matches the visual size. As a flex column
+      // that shorter height would compress the children (a tall code block
+      // collapses and its inner overflow clips it). Pin the children at their
+      // natural height and let the transform: scale() do the shrinking.
+      > * {
+        flex-shrink: 0;
+      }
 
       > p,
       > ul,
@@ -884,6 +903,21 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       > div.references,
       > div.csl-bib-body {
         align-self: stretch;
+      }
+
+      > .code-copy-outer-scaffold,
+      > div.sourceCode,
+      > .code-with-filename,
+      > pre,
+      > div.callout,
+      > div:has(> div.callout),
+      > .bubble-narration,
+      > table,
+      > figure,
+      > div.quarto-figure,
+      > div:has(> p > img),
+      > p:has(> img) {
+        align-self: center;
       }
     }
 
