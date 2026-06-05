@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- style: add fragment index to cover burst for improved title slide.
+
 ## 0.4.0 (2026-06-05)
 
 - fix: replace comic-cover JS plugin with pure-CSS `:has()` cover bleed.
