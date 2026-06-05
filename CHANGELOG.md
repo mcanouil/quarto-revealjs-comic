@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.2 (2026-06-05)
+
 - style: remove border-radius from code filename file in code blocks.
 
 ## 0.4.1 (2026-06-05)
