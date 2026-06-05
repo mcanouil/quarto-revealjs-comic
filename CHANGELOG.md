@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- fix: replace comic-cover JS plugin with pure-CSS `:has()` cover bleed.
+- fix: correct cover corner bracket arm lengths and overflow using fixed pixel positions.
+- fix: apply `.caption` and list styles inside `.speech` slides.
+
 ## 0.3.0 (2026-06-05)
 
 - feat: adjust slide logo height for consistent display.
