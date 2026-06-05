@@ -234,6 +234,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     box-shadow: $panel-shadow;
 
     .code-with-filename-file {
+      border-radius: 0;
       background-color: $comic-paper;
       border-bottom: $ink-border;
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- style: remove border-radius from code filename file in code blocks.
+
 ## 0.4.1 (2026-06-05)
 
 - style: add fragment index to cover burst for improved title slide.
