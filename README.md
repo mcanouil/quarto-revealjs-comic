@@ -6,7 +6,7 @@ Authors opt into distinct visuals (cover splash, section splash, single panel, a
 ## Installation
 
 ```bash
-quarto add mcanouil/quarto-revealjs-comic@0.4.0
+quarto add mcanouil/quarto-revealjs-comic@0.4.1
 ```
 
 This will install the extension under the `_extensions` subdirectory.
@@ -15,7 +15,7 @@ If you are using version control, you will want to check in this directory.
 Alternatively, start a new presentation from the bundled template:
 
 ```bash
-quarto use template mcanouil/quarto-revealjs-comic@0.4.0
+quarto use template mcanouil/quarto-revealjs-comic@0.4.1
 ```
 
 This installs the extension and seeds the project with a ready-to-edit `template.qmd`.

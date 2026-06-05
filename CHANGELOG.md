@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.1 (2026-06-05)
+
 - style: add fragment index to cover burst for improved title slide.
 
 ## 0.4.0 (2026-06-05)
