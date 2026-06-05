@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0 (2026-06-05)
+
 - feat: adjust slide logo height for consistent display.
 - feat: enhance author information display on title slide.
 - feat: centre content in comic panels with flexbox.
