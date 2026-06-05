@@ -21,6 +21,5 @@ contributes:
         - partials/title-slide.html
       revealjs-plugins:
         - revealjs-plugin/page-turn
-        - revealjs-plugin/comic-cover
         - revealjs-plugin/comic-fit
         - revealjs-plugin/tabset

@@ -64,6 +64,31 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   background-size: 130% 130%, 22px 22px, 22px 22px;
 }
 
+// Cover backdrop: red rays and ink stripes over halftone dots over paper.
+// Painted on the full-viewport .slide-background layer so the cover bleeds
+// edge-to-edge with no JS (the letterbox-scaled slide box can't reach the
+// edges). The crisp decor that can't be a gradient (starburst, ink splats,
+// corner frame) stays as in-section .cover-decor DOM on top.
+@mixin comic-cover-surface {
+  background-color: $comic-paper;
+  background-image:
+    repeating-conic-gradient(
+      from -8deg at 22% 48%,
+      rgba(230, 57, 70, 0.18) 0deg 8deg,
+      transparent 8deg 16deg
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0 14px,
+      rgba(11, 11, 11, 0.06) 14px 16px
+    ),
+    radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px),
+    radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px);
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+  background-position: 0 0, 0 0, 0 0, 11px 11px;
+  background-size: auto, auto, 22px 22px, 22px 22px;
+}
+
 .reveal {
   font-family: $font-family-sans-serif;
   font-weight: 400;
@@ -195,16 +220,15 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
 
   // ===== .title-slide as comic-book cover =====
   // The partial emits the author-provided title, subtitle, author, date
-  // wrapped inside .cover-content, and a sibling .cover-decor that holds
-  // purely visual layers (rays, stripes, burst, ink splats, frame corners).
-  // No fake publisher/issue/price text: only the author's own metadata is
-  // shown, with heavy comic-book chrome painted in CSS.
-  // The .comic-cover host paints the halftone paper and clips overflowing decor.
-  // It is applied to both the title-slide section (fallback) and, by the
-  // comic-cover plugin, to the slide's full-viewport .slide-background element so
-  // the whole cover bleeds edge-to-edge across the browser window.
+  // wrapped inside .cover-content, and a sibling .cover-decor that holds the
+  // centred starburst. No fake publisher/issue/price text: only the author's
+  // own metadata is shown, with heavy comic-book chrome painted in CSS.
+  // The cover backdrop (paper, red rays, ink stripes, halftone dots) plus the
+  // corner brackets are painted on the slide's full-viewport .slide-background
+  // layer so they bleed edge-to-edge with no JS, mirroring the .section chapter
+  // splash below. The host class keeps overflow: hidden to clip in-section decor;
+  // the section itself stays transparent so the bled backdrop shows through.
   .comic-cover {
-    @include halftone-bg;
     overflow: hidden;
   }
 
@@ -214,20 +238,54 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     padding: 0;
     text-align: center;
     color: $comic-ink;
-  }
-
-  // When the plugin has promoted the cover to the full-viewport background layer,
-  // suppress the in-section copy so the paper and decor do not double-render.
-  &.comic-cover-bled section.title-slide.comic-cover {
     background-color: transparent;
     background-image: none;
   }
 
-  &.comic-cover-bled section.title-slide .cover-decor {
-    display: none;
+  // Bleed the cover backdrop onto the full-viewport background layer. On screen
+  // reveal marks the cover slide and its matching background `.present`; in
+  // print-pdf it moves each .slide-background into a .pdf-page beside its
+  // <section> and marks every slide present, so a second selector keys on that
+  // wrapper. Same mechanism as the .section splash, so it survives headless PDF
+  // and PNG export where the old JS clone lost the timing race.
+  &:has(.slides section.title-slide.comic-cover.present) .slide-background.present,
+  .pdf-page:has(> section.title-slide.comic-cover) > .slide-background {
+    @include comic-cover-surface;
+
+    // Corner brackets at the viewport corners. Each L is a horizontal plus a
+    // vertical ink bar (6px thick, 46px total = 40px arm + 6px shared corner),
+    // inset 28px. Fixed pixel sizes keep both arms equal on non-square viewports.
+    // Pixel offsets (not %) in the 4-value positions avoid Chrome's (container −
+    // image) × % formula, which shifts differently-sized bars to different corner
+    // points and causes overflow. With px, both bars in each pair land at exactly
+    // the same corner point.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink),
+        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink),
+        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink),
+        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink);
+      background-repeat: no-repeat;
+      background-size:
+        46px 6px, 6px 46px,
+        46px 6px, 6px 46px,
+        46px 6px, 6px 46px,
+        46px 6px, 6px 46px;
+      background-position:
+        left 28px top 28px, left 28px top 28px,
+        right 28px top 28px, right 28px top 28px,
+        left 28px bottom 28px, left 28px bottom 28px,
+        right 28px bottom 28px, right 28px bottom 28px;
+    }
   }
 
-  // Decorative chrome (aria-hidden, purely visual).
+  // Decorative chrome (aria-hidden, purely visual): the centred starburst behind
+  // the title. The bleeding backdrop and corner brackets are painted on the
+  // full-viewport .slide-background above.
   .comic-cover .cover-decor {
     position: absolute;
     inset: 0;
@@ -235,29 +293,9 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     z-index: 0;
   }
 
-  .comic-cover .cover-rays {
-    position: absolute;
-    inset: -20% -10%;
-    background: repeating-conic-gradient(
-      from -8deg at 22% 48%,
-      rgba(230, 57, 70, 0.18) 0deg 8deg,
-      transparent 8deg 16deg
-    );
-  }
-
-  .comic-cover .cover-stripes {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent 0 14px,
-      rgba(11, 11, 11, 0.06) 14px 16px
-    );
-  }
-
   .comic-cover .cover-burst {
     position: absolute;
-    width: 90%;
+    width: 110%;
     aspect-ratio: 1;
     top: 50%;
     left: 50%;
@@ -270,7 +308,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
         $comic-red 36%,
         transparent 42%),
       radial-gradient(circle,
-        rgba(255, 214, 10, 0.45) 0%,
+        rgba(255, 214, 10, 0) 0%,
         transparent 60%);
     background-repeat: no-repeat;
     background-position: center;
@@ -284,49 +322,6 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       28% 6%, 44% 14%
     );
     filter: drop-shadow(8px 8px 0 rgba(0, 0, 0, 0.25));
-  }
-
-  .comic-cover .cover-splat {
-    position: absolute;
-    background: $comic-ink;
-    border-radius: 50%;
-    opacity: 0.55;
-
-    &.cover-splat--a {
-      width: 28px;
-      height: 18px;
-      top: 14%;
-      left: 8%;
-      transform: rotate(20deg);
-      box-shadow:
-        18px 8px 0 -4px $comic-ink,
-        -10px 14px 0 -6px $comic-ink,
-        26px -8px 0 -8px $comic-ink;
-    }
-
-    &.cover-splat--b {
-      width: 24px;
-      height: 14px;
-      bottom: 12%;
-      right: 10%;
-      transform: rotate(-15deg);
-      box-shadow:
-        -14px 6px 0 -3px $comic-ink,
-        12px -10px 0 -6px $comic-ink,
-        -22px -6px 0 -7px $comic-ink;
-    }
-  }
-
-  .comic-cover .cover-corner {
-    position: absolute;
-    width: 7%;
-    height: 7%;
-    border: $thick-ink-border;
-
-    &.cover-corner--tl { top: 3%; left: 3%; border-right: 0; border-bottom: 0; }
-    &.cover-corner--tr { top: 3%; right: 3%; border-left: 0; border-bottom: 0; }
-    &.cover-corner--bl { bottom: 3%; left: 3%; border-right: 0; border-top: 0; }
-    &.cover-corner--br { bottom: 3%; right: 3%; border-left: 0; border-top: 0; }
   }
 
   // Content (author-provided). Centred horizontally and vertically inside
@@ -730,6 +725,73 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       color: $comic-ink;
       text-shadow: none;
     }
+
+    .caption {
+      position: absolute;
+      right: 5%;
+      bottom: 4%;
+      margin-right: -5%;
+      background: $comic-yellow;
+      color: $comic-ink;
+      border: $ink-border;
+      padding: 0.2em 0.6em;
+      font-family: "Permanent Marker", cursive;
+      text-align: right;
+      z-index: 2;
+    }
+
+    ul, ol {
+      margin: 0.2em 0;
+      padding-left: 1.4em;
+    }
+
+    ul { list-style: none; }
+
+    ul > li {
+      position: relative;
+      padding-left: 0.2em;
+      margin: 0.15em 0;
+    }
+
+    ul > li::before {
+      content: "\2605";
+      position: absolute;
+      left: -1.1em;
+      top: 0;
+      color: $comic-yellow;
+      text-shadow:
+        1px 0 0 $comic-ink,
+        -1px 0 0 $comic-ink,
+        0 1px 0 $comic-ink,
+        0 -1px 0 $comic-ink;
+      font-size: 0.95em;
+      line-height: 1.4;
+      transition: opacity 400ms ease-out;
+    }
+
+    ul ul > li::before {
+      content: "\25B8";
+      color: $comic-red;
+      text-shadow: none;
+      font-size: 0.9em;
+    }
+
+    ol {
+      list-style: decimal;
+
+      li {
+        margin: 0.15em 0;
+
+        &::marker {
+          color: $comic-red;
+          font-family: "Bangers", "Impact", sans-serif;
+          font-weight: 700;
+        }
+      }
+    }
+
+    ul > li:has(.fragment:not(.visible))::before { opacity: 0; }
+    ol > li:has(.fragment:not(.visible))::marker { color: transparent; }
   }
 
   // Div-level speech bubble (works in any slide, including section.speech).
@@ -1926,7 +1988,8 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   }
 
   // Hide chrome on the comic cover slide; it reappears on every other slide.
-  &.comic-on-cover {
+  // Pure CSS: keyed on the present cover slide so no JS toggle is needed.
+  &:has(.slides section.title-slide.comic-cover.present) {
     .slide-logo,
     .slide-menu-button,
     .slide-number {

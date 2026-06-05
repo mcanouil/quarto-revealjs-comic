@@ -11,8 +11,9 @@ author:
 institute: "Data Science Superhero League"
 date: today
 # The cover slide is auto-tagged `.title-slide .comic-cover` with `data-no-sound`
-# (see partials/title-slide.html): the comic-cover plugin bleeds the halftone
-# cover to the full viewport and the page-turn plugin stays silent on it.
+# (see partials/title-slide.html): CSS bleeds the halftone cover backdrop to the
+# full viewport via the slide-background layer and the page-turn plugin stays
+# silent on it.
 # The comic-fit plugin auto-scales every slide and accepts optional tuning via
 # the reveal config, e.g.:
 #   comicFit:
@@ -280,7 +281,7 @@ Stacking too many fragments on one slide can outpace the page-turn.
 The `caution` callout completes the five themed variants.
 :::
 
-## Natural Size {.panel data-comic-fit="false"}
+## Natural Size {.panel comic-fit="false"}
 
 This slide carries `data-comic-fit="false"`, so the comic-fit plugin leaves it at its natural size instead of auto-scaling to fit.
 
@@ -290,7 +291,7 @@ Every other slide shrinks, then scrolls, to stay inside the panel.
 `data-comic-fit="false"` opts a slide out of auto-scaling.
 :::
 
-## Silent Panel {.panel data-no-sound=true}
+## Silent Panel {.panel no-sound=true}
 
 This slide carries `data-no-sound`, so the page-turn plugin makes no whoosh when it appears.
 
