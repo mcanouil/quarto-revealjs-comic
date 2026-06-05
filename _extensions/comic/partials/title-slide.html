@@ -22,7 +22,17 @@
     $if(by-author)$
     <div class="cover-byline">
       $for(by-author)$
-      <span class="cover-author">$if(by-author.name.literal)$$by-author.name.literal$$else$$by-author.name$$endif$</span>
+      <div class="cover-author">
+        <span class="cover-author-name">$if(by-author.url)$<a href="$by-author.url$">$endif$$if(by-author.name.literal)$$by-author.name.literal$$else$$by-author.name$$endif$$if(by-author.degrees)$<em class="cover-author-degree">, $for(by-author.degrees)$$by-author.degrees$$sep$, $endfor$</em>$endif$$if(by-author.url)$</a>$endif$</span>
+        $if(by-author.email)$
+        <a class="cover-author-email" href="mailto:$by-author.email$">$by-author.email$</a>
+        $endif$
+        $if(by-author.affiliations)$
+        $for(by-author.affiliations)$
+        <span class="cover-affiliation">$if(it.url)$<a href="$it.url$">$endif$$it.name$$if(it.url)$</a>$endif$</span>
+        $endfor$
+        $endif$
+      </div>
       $endfor$
     </div>
     $endif$

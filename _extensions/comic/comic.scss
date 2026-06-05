@@ -386,11 +386,21 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.4em;
+    align-items: flex-start;
+    gap: 0.6em;
     margin-top: 0.4em;
   }
 
   .slides section.title-slide .cover-author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25em;
+
+    &:nth-of-type(even) .cover-author-name { transform: rotate(2deg); }
+  }
+
+  .slides section.title-slide .cover-author-name {
     font-family: "Permanent Marker", cursive;
     color: $comic-ink;
     background: $comic-yellow;
@@ -400,7 +410,33 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     font-size: 0.9em;
     transform: rotate(-2deg);
 
-    &:nth-of-type(even) { transform: rotate(2deg); }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .cover-author-degree { font-style: italic; }
+  }
+
+  .slides section.title-slide .cover-author-email {
+    font-family: "Permanent Marker", cursive;
+    color: $comic-ink;
+    font-size: 0.7em;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  .slides section.title-slide .cover-affiliation {
+    font-family: "Permanent Marker", cursive;
+    background: $comic-white;
+    color: $comic-ink;
+    border: $ink-border;
+    box-shadow: 3px 3px 0 $comic-ink;
+    padding: 0.05em 0.5em;
+    font-size: 0.7em;
+    transform: rotate(1deg);
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
   }
 
   .slides section.title-slide .cover-date {
