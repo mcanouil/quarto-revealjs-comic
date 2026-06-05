@@ -281,7 +281,7 @@ Stacking too many fragments on one slide can outpace the page-turn.
 The `caution` callout completes the five themed variants.
 :::
 
-## Natural Size {.panel comic-fit="false"}
+## Natural Size {.panel data-comic-fit="false"}
 
 This slide carries `data-comic-fit="false"`, so the comic-fit plugin leaves it at its natural size instead of auto-scaling to fit.
 
@@ -291,7 +291,7 @@ Every other slide shrinks, then scrolls, to stay inside the panel.
 `data-comic-fit="false"` opts a slide out of auto-scaling.
 :::
 
-## Silent Panel {.panel no-sound=true}
+## Silent Panel {.panel data-no-sound=true}
 
 This slide carries `data-no-sound`, so the page-turn plugin makes no whoosh when it appears.
 

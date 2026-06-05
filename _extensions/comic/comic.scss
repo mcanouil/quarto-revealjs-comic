@@ -89,6 +89,81 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   background-size: auto, auto, 22px 22px, 22px 22px;
 }
 
+// Shared caption style used by section.panel and section.speech.
+@mixin comic-caption {
+  .caption {
+    position: absolute;
+    right: 5%;
+    bottom: 4%;
+    margin-right: -5%;
+    background: $comic-yellow;
+    color: $comic-ink;
+    border: $ink-border;
+    padding: 0.2em 0.6em;
+    font-family: "Permanent Marker", cursive;
+    text-align: right;
+    z-index: 2;
+  }
+}
+
+// Shared comic-style list rules used by section.panel and section.speech.
+@mixin comic-list-styles {
+  ul, ol {
+    margin: 0.2em 0;
+    padding-left: 1.4em;
+  }
+
+  ul { list-style: none; }
+
+  ul > li {
+    position: relative;
+    padding-left: 0.2em;
+    margin: 0.15em 0;
+  }
+
+  ul > li::before {
+    content: "\2605";
+    position: absolute;
+    left: -1.1em;
+    top: 0;
+    color: $comic-yellow;
+    text-shadow:
+      1px 0 0 $comic-ink,
+      -1px 0 0 $comic-ink,
+      0 1px 0 $comic-ink,
+      0 -1px 0 $comic-ink;
+    font-size: 0.95em;
+    line-height: 1.4;
+    transition: opacity 400ms ease-out;
+  }
+
+  ul ul > li::before {
+    content: "\25B8";
+    color: $comic-red;
+    text-shadow: none;
+    font-size: 0.9em;
+  }
+
+  ol {
+    list-style: decimal;
+
+    li {
+      margin: 0.15em 0;
+
+      &::marker {
+        color: $comic-red;
+        font-family: "Bangers", "Impact", sans-serif;
+        font-weight: 700;
+      }
+    }
+  }
+
+  // Hold the marker back until the item's fragment is revealed, so the
+  // marker appears together with its text rather than ahead of it.
+  ul > li:has(.fragment:not(.visible))::before { opacity: 0; }
+  ol > li:has(.fragment:not(.visible))::marker { color: transparent; }
+}
+
 .reveal {
   font-family: $font-family-sans-serif;
   font-weight: 400;
@@ -264,22 +339,25 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       position: absolute;
       inset: 0;
       pointer-events: none;
+      $bracket-ink: linear-gradient($comic-ink, $comic-ink);
+      $bracket-pair: 46px 6px, 6px 46px;
+      $bracket-inset: 28px;
       background-image:
-        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink),
-        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink),
-        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink),
-        linear-gradient($comic-ink, $comic-ink), linear-gradient($comic-ink, $comic-ink);
+        $bracket-ink, $bracket-ink,
+        $bracket-ink, $bracket-ink,
+        $bracket-ink, $bracket-ink,
+        $bracket-ink, $bracket-ink;
       background-repeat: no-repeat;
       background-size:
-        46px 6px, 6px 46px,
-        46px 6px, 6px 46px,
-        46px 6px, 6px 46px,
-        46px 6px, 6px 46px;
+        $bracket-pair,
+        $bracket-pair,
+        $bracket-pair,
+        $bracket-pair;
       background-position:
-        left 28px top 28px, left 28px top 28px,
-        right 28px top 28px, right 28px top 28px,
-        left 28px bottom 28px, left 28px bottom 28px,
-        right 28px bottom 28px, right 28px bottom 28px;
+        left $bracket-inset top $bracket-inset, left $bracket-inset top $bracket-inset,
+        right $bracket-inset top $bracket-inset, right $bracket-inset top $bracket-inset,
+        left $bracket-inset bottom $bracket-inset, left $bracket-inset bottom $bracket-inset,
+        right $bracket-inset bottom $bracket-inset, right $bracket-inset bottom $bracket-inset;
     }
   }
 
@@ -576,21 +654,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       z-index: 2;
     }
 
-    .caption {
-      // Pin caption to the bottom-right with a symmetrical right overflow
-      // mirroring the heading's left overflow. Right-align caption text.
-      position: absolute;
-      right: 5%;
-      bottom: 4%;
-      margin-right: -5%;
-      background: $comic-yellow;
-      color: $comic-ink;
-      border: $ink-border;
-      padding: 0.2em 0.6em;
-      font-family: "Permanent Marker", cursive;
-      text-align: right;
-      z-index: 2;
-    }
+    @include comic-caption;
   }
 
   // ===== .action (BAM / POW / ZAP) =====
@@ -726,72 +790,8 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       text-shadow: none;
     }
 
-    .caption {
-      position: absolute;
-      right: 5%;
-      bottom: 4%;
-      margin-right: -5%;
-      background: $comic-yellow;
-      color: $comic-ink;
-      border: $ink-border;
-      padding: 0.2em 0.6em;
-      font-family: "Permanent Marker", cursive;
-      text-align: right;
-      z-index: 2;
-    }
-
-    ul, ol {
-      margin: 0.2em 0;
-      padding-left: 1.4em;
-    }
-
-    ul { list-style: none; }
-
-    ul > li {
-      position: relative;
-      padding-left: 0.2em;
-      margin: 0.15em 0;
-    }
-
-    ul > li::before {
-      content: "\2605";
-      position: absolute;
-      left: -1.1em;
-      top: 0;
-      color: $comic-yellow;
-      text-shadow:
-        1px 0 0 $comic-ink,
-        -1px 0 0 $comic-ink,
-        0 1px 0 $comic-ink,
-        0 -1px 0 $comic-ink;
-      font-size: 0.95em;
-      line-height: 1.4;
-      transition: opacity 400ms ease-out;
-    }
-
-    ul ul > li::before {
-      content: "\25B8";
-      color: $comic-red;
-      text-shadow: none;
-      font-size: 0.9em;
-    }
-
-    ol {
-      list-style: decimal;
-
-      li {
-        margin: 0.15em 0;
-
-        &::marker {
-          color: $comic-red;
-          font-family: "Bangers", "Impact", sans-serif;
-          font-weight: 700;
-        }
-      }
-    }
-
-    ul > li:has(.fragment:not(.visible))::before { opacity: 0; }
-    ol > li:has(.fragment:not(.visible))::marker { color: transparent; }
+    @include comic-caption;
+    @include comic-list-styles;
   }
 
   // Div-level speech bubble (works in any slide, including section.speech).
@@ -1068,60 +1068,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     }
 
     // ----- Lists -----
-    ul, ol {
-      margin: 0.2em 0;
-      padding-left: 1.4em;
-    }
-
-    ul { list-style: none; }
-
-    ul > li {
-      position: relative;
-      padding-left: 0.2em;
-      margin: 0.15em 0;
-    }
-
-    ul > li::before {
-      content: "\2605";
-      position: absolute;
-      left: -1.1em;
-      top: 0;
-      color: $comic-yellow;
-      text-shadow:
-        1px 0 0 $comic-ink,
-        -1px 0 0 $comic-ink,
-        0 1px 0 $comic-ink,
-        0 -1px 0 $comic-ink;
-      font-size: 0.95em;
-      line-height: 1.4;
-      transition: opacity 400ms ease-out;
-    }
-
-    ul ul > li::before {
-      content: "\25B8";
-      color: $comic-red;
-      text-shadow: none;
-      font-size: 0.9em;
-    }
-
-    ol {
-      list-style: decimal;
-
-      li {
-        margin: 0.15em 0;
-
-        &::marker {
-          color: $comic-red;
-          font-family: "Bangers", "Impact", sans-serif;
-          font-weight: 700;
-        }
-      }
-    }
-
-    // Hold the marker back until the item's fragment is revealed, so the
-    // marker appears together with its text rather than ahead of it.
-    ul > li:has(.fragment:not(.visible))::before { opacity: 0; }
-    ol > li:has(.fragment:not(.visible))::marker { color: transparent; }
+    @include comic-list-styles;
 
     // ----- Blockquote -----
     blockquote {
