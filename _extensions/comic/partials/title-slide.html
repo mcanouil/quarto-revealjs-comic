@@ -5,14 +5,14 @@
 
   <div class="cover-content">
     <div class="cover-title-block">
-      <h1 class="title">$title$</h1>
+      <h1 class="title fragment comic-pop" data-fragment-index="1">$title$</h1>
       $if(subtitle)$
-      <p class="subtitle">$subtitle$</p>
+      <p class="subtitle fragment" data-fragment-index="2">$subtitle$</p>
       $endif$
     </div>
 
     $if(by-author)$
-    <div class="cover-byline">
+    <div class="cover-byline fragment" data-fragment-index="10">
       $for(by-author)$
       <div class="cover-author">
         <span class="cover-author-name">$if(by-author.url)$<a href="$by-author.url$">$endif$$if(by-author.name.literal)$$by-author.name.literal$$else$$by-author.name$$endif$$if(by-author.degrees)$<em class="cover-author-degree">, $for(by-author.degrees)$$by-author.degrees$$sep$, $endfor$</em>$endif$$if(by-author.url)$</a>$endif$</span>
@@ -30,7 +30,7 @@
     $endif$
 
     $if(date)$
-    <span class="cover-date">$date$</span>
+    <span class="cover-date fragment" data-fragment-index="10">$date$</span>
     $endif$
   </div>
 </section>
