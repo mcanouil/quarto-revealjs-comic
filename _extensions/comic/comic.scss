@@ -1882,6 +1882,13 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     }
   }
 
+  // Slide logo: fixed height so it stays stable across viewport sizes and sits
+  // in the same band as the menu button (~50px) and slide-number chip, rather
+  // than Quarto's tiny viewport-relative default.
+  .slide-logo {
+    max-height: 50px !important;
+  }
+
   // Hide chrome on the comic cover slide; it reappears on every other slide.
   &.comic-on-cover {
     .slide-logo,

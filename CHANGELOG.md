@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- feat: adjust slide logo height for consistent display.
+
 ## 0.2.0 (2026-06-04)
 
 - feat: enhance code-window styling for comic panels.

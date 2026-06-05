@@ -5,6 +5,7 @@ author:
   - name: "Mickaël CANOUIL, _Ph.D._"
     orcid: "0000-0002-3396-4549"
     url: "https://mickael.canouil.fr"
+institute: "Data Science Superhero League"
 date: today
 # The cover slide is auto-tagged `.title-slide .comic-cover` with `data-no-sound`
 # (see partials/title-slide.html): the comic-cover plugin bleeds the halftone
@@ -52,7 +53,7 @@ Mission objectives, decoded from dispatch.
 - [Recover the stolen circuitry before sunrise.]{.fragment .comic-pop}
 - [Avoid the press at all costs.]{.fragment .comic-pop}
 
-::: {.caption}
+::: {.caption .fragment}
 List items revealed with the `.comic-pop` fragment.
 :::
 
@@ -78,7 +79,7 @@ Recover the circuitry before the trail goes cold.
 :::
 :::
 
-::: {.caption}
+::: {.caption .fragment}
 Themed callouts: `note`, `tip`, `warning`, and `important`.
 :::
 
@@ -98,7 +99,7 @@ Table @tbl-incidents shows where to focus tonight.
 >
 > Dispatch logbook, night shift.
 
-::: {.caption}
+::: {.caption .fragment}
 Themed table and blockquote inside a `.panel`.
 :::
 
