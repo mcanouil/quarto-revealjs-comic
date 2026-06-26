@@ -922,6 +922,14 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       transition: background-color 500ms ease-out;
     }
 
+    // An image-only paragraph carries no text, so drop the paper chip and let
+    // the figure sit directly on the halftone background.
+    p:has(> img:only-child) {
+      width: auto;
+      background: transparent;
+      padding: 0;
+    }
+
     // Hold the paper backdrop back until the fragment is revealed, so the
     // chip appears together with its text rather than as an empty box.
     :is(p, ul, ol, blockquote, pre, div.sourceCode):has(.fragment:not(.visible)) {
