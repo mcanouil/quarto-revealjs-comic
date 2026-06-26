@@ -1560,14 +1560,15 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
 
   .slides .bubble-thought {
     position: relative;
-    display: inline-block;
+    display: block;
+    width: fit-content;
     text-align: center;
     background: $comic-white;
     color: $comic-ink;
     border: $thick-ink-border;
     border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
     padding: 1em 1.8em;
-    margin: 1em 0 2em 0;
+    margin: 1em auto 2em auto;
     max-width: 60%;
     font-family: "Comic Neue", "Comic Sans MS", cursive;
     font-style: italic;
