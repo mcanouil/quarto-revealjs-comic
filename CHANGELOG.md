@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- style: centre thought bubble text and narrow it so text clears the outline.
+
 ## 0.4.3 (2026-06-26)
 
 - fix: preserve user attributes (`.fragment`, `fragment-index`, `#id`, custom classes) on bubble divs.
