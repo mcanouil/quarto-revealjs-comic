@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.3 (2026-06-26)
+
 - fix: preserve user attributes (`.fragment`, `fragment-index`, `#id`, custom classes) on bubble divs.
 - style: centre shout text and narrow the speech bubble so text clears the outline.
 
