@@ -170,14 +170,14 @@ ZAP!
 
 ## "Stop right there!"
 
-::: {.shout}
+::: {.shout .fragment}
 Stop right there!
 :::
 
 The rooftop falls silent.
 
 ::: {.caption}
-A `.shout` bubble div.
+A `.shout` bubble div revealed with `.fragment`.
 :::
 
 ## City At Night {.halftone}
@@ -212,7 +212,7 @@ KA-BOOM!
 
 ## Aftermath {.panel}
 
-::: {.narration}
+::: {.narration .fragment}
 Three minutes later, the city is quiet again.
 The press is already on its way.
 :::

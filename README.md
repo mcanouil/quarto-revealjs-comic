@@ -62,8 +62,7 @@ With great Quarto comes great responsibility.
 ### Bubble divs
 
 Drop a styled bubble anywhere inside a slide by wrapping Markdown in a div.
-The filter paints each variant with its own shape and border; the body is
-ordinary Markdown, so emphasis, links, and lists all work:
+The filter paints each variant with its own shape and border; the body is ordinary Markdown, so emphasis, links, and lists all work:
 
 ```markdown
 ::: {.speech}
@@ -94,6 +93,14 @@ Three minutes later, the city is quiet again.
 | `.shout`     | Spiky shout bubble for raised voices.  |
 | `.whisper`   | Soft dashed bubble for quiet asides.   |
 | `.narration` | Rectangular caption box for narration. |
+
+Bubble divs accept the same standard reveal.js classes and attributes as any other div, so `.fragment`, `fragment-index`, an `#id`, and custom classes apply to the whole bubble:
+
+```markdown
+::: {.shout .fragment fragment-index="2"}
+Stop right there!
+:::
+```
 
 ### Fragment entrances
 
