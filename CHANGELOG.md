@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- style: centre thought bubble text and narrow it so text clears the outline.
+- style: centre the thought bubble on the slide, narrow it, and centre its text.
 
 ## 0.4.3 (2026-06-26)
 
