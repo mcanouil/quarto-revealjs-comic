@@ -807,12 +807,12 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     color: $comic-ink;
     border: $thick-ink-border;
     border-radius: 32px;
-    padding: 0.8em 1.2em;
+    padding: 0.9em 1.8em;
     font-family: "Comic Neue", cursive;
     font-weight: 700;
     font-size: 1.3em;
     box-shadow: $panel-shadow;
-    max-width: 80%;
+    max-width: 60%;
     z-index: 1;
 
     &::after {
@@ -1602,6 +1602,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   .slides .bubble-shout {
     position: relative;
     display: inline-block;
+    text-align: center;
     background: $comic-yellow;
     color: $comic-red;
     padding: 0.8em 1.6em;
