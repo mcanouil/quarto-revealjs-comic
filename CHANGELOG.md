@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.7 (2026-06-26)
+
 - style: bleed the halftone dots across the full window on every halftone variant, instead of only the slide box, so the dot field reaches the screen edges as one continuous grid.
 - style: fill the background around the panel card, speech bubble, and action/explosion burst with halftone dots, so `.panel`, `.speech`, `.action`, and `.explosion` slides sit on the same dotted field as `.halftone`.
 - style: drop the faint grey 45-degree ink-hatch from the title-slide cover backdrop, keeping the red rays and halftone dots.
