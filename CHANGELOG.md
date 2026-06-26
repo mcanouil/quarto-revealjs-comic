@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix: centre image-only paragraphs on halftone slides by excluding them from the paper-chip rule, whose higher specificity previously overrode the dedicated exclusion and left the figure shrunk to a `fit-content` block against the left edge.
+
 ## 0.4.5 (2026-06-26)
 
 - fix: honour slide-level `background-color` on halftone slides so the dots render over the chosen colour.

@@ -914,8 +914,11 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
 
     // The paper chip backs plain prose only. Text that lives inside a themed
     // component (caption, bubble, narration, callout) already has its own
-    // surface, so exclude those descendants.
-    :is(p, ul, ol, blockquote, pre, div.sourceCode):not(:is(.caption, .callout, [class*="bubble"]) *) {
+    // surface, so exclude those descendants. An image-only paragraph carries no
+    // text, so it is excluded too: it keeps its default full width and the
+    // figure stays centred on the halftone background rather than shrinking to
+    // a fit-content block stuck against the left edge.
+    :is(p, ul, ol, blockquote, pre, div.sourceCode):not(:is(.caption, .callout, [class*="bubble"]) *):not(:has(> img:only-child)) {
       background: rgba(253, 246, 227, 0.92);
       padding: 0.3em 0.6em;
       border-radius: 4px;
@@ -923,14 +926,6 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       max-width: 100%;
       box-sizing: border-box;
       transition: background-color 500ms ease-out;
-    }
-
-    // An image-only paragraph carries no text, so drop the paper chip and let
-    // the figure sit directly on the halftone background.
-    p:has(> img:only-child) {
-      width: auto;
-      background: transparent;
-      padding: 0;
     }
 
     // Hold the paper backdrop back until the fragment is revealed, so the
