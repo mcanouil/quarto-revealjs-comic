@@ -3,6 +3,7 @@
 ## Unreleased
 
 - style: centre the thought bubble on the slide, narrow it, and centre its text.
+- style: bolden the shout bubble text to match the other display text.
 
 ## 0.4.3 (2026-06-26)
 
