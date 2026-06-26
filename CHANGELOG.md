@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.5 (2026-06-26)
+
 - fix: honour slide-level `background-color` on halftone slides so the dots render over the chosen colour.
 
 ## 0.4.4 (2026-06-26)
