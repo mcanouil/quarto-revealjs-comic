@@ -5,6 +5,7 @@
 - style: centre the thought bubble on the slide, narrow it, and centre its text.
 - style: bolden the shout bubble text to match the other display text.
 - style: drop the paper chip behind image-only paragraphs on halftone slides.
+- style: limit the halftone paper chip to plain prose, sparing captions, bubbles, callouts, and panel slides.
 
 ## 0.4.3 (2026-06-26)
 
