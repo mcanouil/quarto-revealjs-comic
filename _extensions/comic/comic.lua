@@ -32,7 +32,11 @@ local function Div(el)
 
   for source_class, wrapper_class in pairs(bubble_classes) do
     if helpers.has_class(el.classes, source_class) then
-      return pandoc.Div(el.content, helpers.attr(nil, { wrapper_class }))
+      -- Add the wrapper class onto the original div instead of rebuilding it, so
+      -- user attributes (id, .fragment, data-fragment-index, custom classes/keys)
+      -- survive onto the rendered bubble the same way they do on .caption.
+      helpers.add_class(el.classes, wrapper_class)
+      return el
     end
   end
   return nil
