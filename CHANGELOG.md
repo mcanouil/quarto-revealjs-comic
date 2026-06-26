@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- style: hide the menu button and slide number on section slides.
+
 - style: centre the thought bubble on the slide, narrow it, and centre its text.
 - style: bolden the shout bubble text to match the other display text.
 - style: drop the paper chip behind image-only paragraphs on halftone slides.
