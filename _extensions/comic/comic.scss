@@ -1968,6 +1968,15 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     }
   }
 
+  // Hide the menu button and slide number on chapter section splashes; they
+  // reappear on every other slide. Keyed on the present .section slide.
+  &:has(.slides section.section.present) {
+    .slide-menu-button,
+    .slide-number {
+      display: none !important;
+    }
+  }
+
   // Hide chrome in print/PDF export.
   body.print-pdf & .slide-number,
   body.print-pdf & .slide-menu-button {
