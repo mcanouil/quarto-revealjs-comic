@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix: honour slide-level `background-color` on halftone slides so the dots render over the chosen colour.
+
 ## 0.4.4 (2026-06-26)
 
 - style: hide the menu button and slide number on section slides.

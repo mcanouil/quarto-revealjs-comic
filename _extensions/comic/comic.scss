@@ -940,6 +940,15 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     }
   }
 
+  // When the slide sets its own background-color, Reveal paints it on the
+  // full-viewport .slide-background behind this section. Drop the opaque paper
+  // fill so that colour shows through; the dots (a separate background-image)
+  // stay and render over the user's colour. Reveal keeps data-background-color
+  // on the <section>, so this needs no JS/Lua.
+  .slides section.halftone[data-background-color] {
+    background-color: transparent;
+  }
+
   // ===== .halftone compositions =====
   // When .halftone combines with another slide-level class, ensure dots
   // remain visible behind that class's own chrome. Source order (this block
