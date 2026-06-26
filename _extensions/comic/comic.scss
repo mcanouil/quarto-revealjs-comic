@@ -64,11 +64,11 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   background-size: 130% 130%, 22px 22px, 22px 22px;
 }
 
-// Cover backdrop: red rays and ink stripes over halftone dots over paper.
-// Painted on the full-viewport .slide-background layer so the cover bleeds
-// edge-to-edge with no JS (the letterbox-scaled slide box can't reach the
-// edges). The crisp decor that can't be a gradient (starburst, ink splats,
-// corner frame) stays as in-section .cover-decor DOM on top.
+// Cover backdrop: red rays over halftone dots over paper. Painted on the
+// full-viewport .slide-background layer so the cover bleeds edge-to-edge with
+// no JS (the letterbox-scaled slide box can't reach the edges). The crisp
+// decor that can't be a gradient (starburst, ink splats, corner frame) stays
+// as in-section .cover-decor DOM on top.
 @mixin comic-cover-surface {
   background-color: $comic-paper;
   background-image:
@@ -77,16 +77,11 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
       rgba(230, 57, 70, 0.18) 0deg 8deg,
       transparent 8deg 16deg
     ),
-    repeating-linear-gradient(
-      45deg,
-      transparent 0 14px,
-      rgba(11, 11, 11, 0.06) 14px 16px
-    ),
     radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px),
     radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px);
-  background-repeat: no-repeat, no-repeat, repeat, repeat;
-  background-position: 0 0, 0 0, 0 0, 11px 11px;
-  background-size: auto, auto, 22px 22px, 22px 22px;
+  background-repeat: no-repeat, repeat, repeat;
+  background-position: 0 0, 0 0, 11px 11px;
+  background-size: auto, 22px 22px, 22px 22px;
 }
 
 // Shared caption style used by section.panel and section.speech.
@@ -668,10 +663,10 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     min-height: 100%;
     box-sizing: border-box;
     padding: 6%;
-    background:
-      radial-gradient(circle closest-side at center, $comic-yellow 0%, $comic-yellow 38%, $comic-red 40%, $comic-red 72%, transparent 85%),
-      $comic-paper;
-    background-size: 100% 100%, auto;
+    // The dots fill the window from the background layer, so the slide box
+    // keeps only the action burst, floating it over those dots.
+    background: radial-gradient(circle closest-side at center, $comic-yellow 0%, $comic-yellow 38%, $comic-red 40%, $comic-red 72%, transparent 85%);
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
 
@@ -721,7 +716,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   // Div-level: the Lua filter wraps :::{.speech} content in .speech-bubble
   // and the ::after triangle below provides the tail.
   .slides section.speech {
-    background: $comic-paper;
+    background: transparent;
     text-align: center;
     min-height: 100%;
     box-sizing: border-box;
@@ -897,7 +892,7 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
   // backdrop. Headings get an inline yellow box; body text gets a
   // semi-opaque paper backdrop.
   .slides section.halftone {
-    @include halftone-bg;
+    background-color: transparent;
     min-height: 100%;
     box-sizing: border-box;
     padding: 4% 6%;
@@ -935,13 +930,32 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     }
   }
 
-  // When the slide sets its own background-color, Reveal paints it on the
-  // full-viewport .slide-background behind this section. Drop the opaque paper
-  // fill so that colour shows through; the dots (a separate background-image)
-  // stay and render over the user's colour. Reveal keeps data-background-color
-  // on the <section>, so this needs no JS/Lua.
-  .slides section.halftone[data-background-color] {
-    background-color: transparent;
+  // Bleed the halftone dot field onto the full-viewport background layer behind
+  // the slide. For .halftone it fills the whole slide; for .panel and .speech
+  // it fills the area around the white card / speech bubble; for .action and
+  // .explosion it fills the area around the burst. Those slides' own surfaces
+  // (card, bubble, burst, ink star) sit on top. The slide box is
+  // letterbox-scaled and can't reach the screen edges, and its scaled grid
+  // would not line up with the margins, so paint the unscaled .slide-background
+  // instead. Same :has()/.pdf-page mechanism as the cover and chapter splash,
+  // so it survives headless PDF/PNG export. Reveal applies any
+  // data-background-color as an inline style on this same element, which beats
+  // the mixin's stylesheet background-color, so the user's colour shows through
+  // with the dots on top. background-repeat is reset because
+  // comic-section-surface (which also matches .section.halftone) leaves a
+  // `no-repeat` first value behind.
+  &:has(.slides section.halftone.present) .slide-background.present,
+  &:has(.slides section.panel.present) .slide-background.present,
+  &:has(.slides section.speech.present) .slide-background.present,
+  &:has(.slides section.action.present) .slide-background.present,
+  &:has(.slides section.explosion.present) .slide-background.present,
+  .pdf-page:has(> section.halftone) > .slide-background,
+  .pdf-page:has(> section.panel) > .slide-background,
+  .pdf-page:has(> section.speech) > .slide-background,
+  .pdf-page:has(> section.action) > .slide-background,
+  .pdf-page:has(> section.explosion) > .slide-background {
+    @include halftone-bg;
+    background-repeat: repeat;
   }
 
   // ===== .halftone compositions =====
@@ -963,32 +977,19 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     width: auto;
   }
 
-  // .section.halftone: keep the starburst by layering it over halftone dots.
+  // .section.halftone: the dots fill the window from the background layer, so
+  // the slide box keeps only the starburst, floating it over those dots.
   .slides section.section.halftone {
-    background:
-      $starburst-yellow,
-      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 0 0 / 22px 22px,
-      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 11px 11px / 22px 22px,
-      $comic-paper;
-    background-repeat: no-repeat, repeat, repeat, repeat;
-    background-position: center, 0 0, 11px 11px, center;
-    background-size: 140% 140%, 22px 22px, 22px 22px, auto;
+    background: $starburst-yellow;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 140% 140%;
   }
 
-  // .speech.halftone: leave bubble pseudos; halftone bg already applies.
-  // .action.halftone: keep the action burst; the radial gradient stays in
-  // place because its rule sits before this section, but we explicitly
-  // overlay dots between the burst and the paper.
-  .slides section.action.halftone {
-    background:
-      radial-gradient(circle closest-side at center, $comic-yellow 0%, $comic-yellow 38%, $comic-red 40%, $comic-red 72%, transparent 85%),
-      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 0 0 / 22px 22px,
-      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 11px 11px / 22px 22px,
-      $comic-paper;
-    background-repeat: no-repeat, repeat, repeat, repeat;
-    background-position: center, 0 0, 11px 11px, center;
-    background-size: 100% 100%, 22px 22px, 22px 22px, auto;
-  }
+  // .speech.halftone and .action.halftone need no rules here: their base
+  // .speech / .action slides already drop to a transparent (or burst-only)
+  // surface and pull the dots from the background layer, and .halftone adds
+  // nothing on top.
 
   // ===== Component restyling (panel scope) =====
   // All component overrides below apply only inside .panel slides so plain
@@ -1442,15 +1443,16 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     min-height: 100%;
     box-sizing: border-box;
     padding: 6%;
+    // The dots fill the window from the background layer, so the slide box
+    // keeps only the explosion burst, floating it over those dots.
     background:
       radial-gradient(circle closest-side at center,
         $comic-yellow 0%,
         $comic-yellow 32%,
         $comic-red 34%,
         $comic-red 72%,
-        transparent 88%),
-      $comic-paper;
-    background-size: 100% 100%, auto;
+        transparent 88%);
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
 
@@ -1504,22 +1506,8 @@ $starburst-yellow: radial-gradient(circle, $comic-yellow 0%, $comic-yellow 30%, 
     }
   }
 
-  // .explosion.halftone composition: keep the burst, overlay dots.
-  .slides section.explosion.halftone {
-    background:
-      radial-gradient(circle closest-side at center,
-        $comic-yellow 0%,
-        $comic-yellow 32%,
-        $comic-red 34%,
-        $comic-red 72%,
-        transparent 88%),
-      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 0 0 / 22px 22px,
-      radial-gradient(rgba(11, 11, 11, 0.32) 1.2px, transparent 1.5px) 11px 11px / 22px 22px,
-      $comic-paper;
-    background-repeat: no-repeat, repeat, repeat, repeat;
-    background-position: center, 0 0, 11px 11px, center;
-    background-size: 100% 100%, 22px 22px, 22px 22px, auto;
-  }
+  // .explosion.halftone needs no rule: the base .explosion slide is already
+  // burst-only over the background-layer dots, and .halftone adds nothing.
 
   // ===== {{< boom >}} shortcode =====
   // Inline jagged spike-burst. The text sits over a yellow star polygon

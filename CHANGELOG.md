@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- style: bleed the halftone dots across the full window on every halftone variant, instead of only the slide box, so the dot field reaches the screen edges as one continuous grid.
+- style: fill the background around the panel card, speech bubble, and action/explosion burst with halftone dots, so `.panel`, `.speech`, `.action`, and `.explosion` slides sit on the same dotted field as `.halftone`.
+- style: drop the faint grey 45-degree ink-hatch from the title-slide cover backdrop, keeping the red rays and halftone dots.
+
 ## 0.4.6 (2026-06-26)
 
 - fix: centre image-only paragraphs on halftone slides by excluding them from the paper-chip rule, whose higher specificity previously overrode the dedicated exclusion and left the figure shrunk to a `fit-content` block against the left edge.
