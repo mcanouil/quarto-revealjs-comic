@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 1.0.0 (2026-07-02)
+
+- chore: no changes.
+
 ## 0.4.7 (2026-06-26)
 
 - style: bleed the halftone dots across the full window on every halftone variant, instead of only the slide box, so the dot field reaches the screen edges as one continuous grid.
