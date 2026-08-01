@@ -51,6 +51,16 @@ Three minutes later, the city is quiet again.
 - [Splat in like wet ink.]{.fragment .ink-splat}
 - [Flash a highlight across the text.]{.fragment .zap-highlight}
 
+## The Confrontation {.panel}
+
+{{< bam >}}
+
+{{< boom "KAPOW!" colour=blue top=12% right=8% rotate=-15 >}}
+
+::: {.caption}
+Meanwhile, at the observatory.
+:::
+
 ## Halftone, composed {.panel .halftone}
 
 `.halftone` is a modifier, so it combines with any other class.

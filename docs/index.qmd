@@ -10,8 +10,8 @@ authors:
 
 Most slide themes vary the typeface and leave the structure alone.
 
-`comic` gives a deck the vocabulary of a comic book instead: cover and chapter splashes, single panels, action slides, speech bubbles, and halftone.
-Each is a class on a heading or a div, so the source stays markdown and only the slides that want a visual take one.
+`comic` gives a deck the vocabulary of a comic book instead: cover and chapter splashes, single panels, action slides, speech bubbles, halftone, and lettered bursts.
+Each is a class on a heading or a div, or a shortcode, so the source stays markdown and only the slides that want a visual take one.
 
 [See a deck built by this site](preview.html).
 
@@ -68,7 +68,7 @@ POW!
 
 A slide with no class is an ordinary slide in the theme's styling.
 
-See the [Reference](reference.qmd) for every class, and the [Examples](examples.qmd) for the source behind the deck.
+See the [Reference](reference.qmd) for every class and shortcode, and the [Examples](examples.qmd) for the source behind the deck.
 
 ## Where it works
 
@@ -76,7 +76,7 @@ RevealJS.
 
 ## Links
 
-- [Reference](reference.qmd) for every class and entrance.
+- [Reference](reference.qmd) for every class, shortcode, and entrance.
 - [Examples](examples.qmd) for the source behind the deck.
 - [Preview deck](preview.html) to look at.
 - [Changelog](changelog.qmd) for what each release changed.

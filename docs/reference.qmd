@@ -49,6 +49,54 @@ Stop right there!
 :::
 ```
 
+## The caption div
+
+A `.caption` div at the end of a slide is pinned to the slide corner:
+
+```markdown
+::: {.caption}
+Meanwhile, at the observatory.
+:::
+```
+
+Every other block on a slide is wrapped in one element that the theme shrinks to fit the slide.
+A trailing `.caption` is left outside that wrapper, so it stays where it is and at its own size while the rest of the slide scales.
+
+## Callout shortcodes
+
+Two shortcodes stamp a lettered burst onto a slide.
+Each emits a `<div>`, and each renders nothing outside RevealJS.
+
+```markdown
+{{{< bam >}}}
+{{{< boom "KAPOW!" colour=blue top=10% right=8% rotate=-15 >}}}
+```
+
+| Shortcode | First argument | Default colour | Shape |
+| --- | --- | --- | --- |
+| `bam` | The text, default `BAM!` | `yellow` | A skewed, ink-outlined burst. |
+| `boom` | The text, default `BOOM!` | `red` | A jagged spike-burst, with the text clipped inside the star. |
+
+: The two callout shortcodes. {.striped .hover tbl-colwidths="[14,26,16,44]"}
+
+Both take the same attributes.
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `colour` | `yellow`, `red` or `blue` | Anything else falls back to the shortcode's default colour. |
+| `top`, `right`, `bottom`, `left` | CSS length | An offset such as `10%`, `40px` or `2em`. Giving any one of the four floats the callout over the slide. |
+| `rotate` | number or `Ndeg` | A bare number is read as degrees. |
+| `size` | CSS length | The callout's font size, such as `3em`. |
+| `fragment` | `burst`, `pop` or `splat` | Reveals the callout as a fragment with that entrance. `true`, and any value not listed here, gives `burst`; `false`, `off`, `no` and `0` leave it out of the fragment sequence. |
+| `index` | non-negative integer | Orders the callout among the slide's fragments. |
+
+: The callout attributes. {.striped .hover tbl-colwidths="[22,22,56]"}
+
+::: {.callout-note}
+Each value is checked before it reaches the page, and one that does not fit its type is dropped rather than reported.
+A `rotate` that is not a number, a length without a unit Quarto recognises, or a negative `index` all leave the callout with its default instead.
+:::
+
 ## Fragment entrances
 
 Comic-themed entrances for any [RevealJS fragment](https://quarto.org/docs/presentations/revealjs/advanced.html#fragments), combined with `.fragment` on a span, a list item, or a div.
