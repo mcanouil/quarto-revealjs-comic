@@ -1,0 +1,121 @@
+---
+title: "Examples"
+subtitle: "The source behind the deck."
+description: "Each comic visual with the markdown that produces it, as built into this site's preview deck."
+---
+
+The [preview deck](preview.html) is built by this site.
+This page is the source behind it.
+
+## Splashes and panels
+
+```markdown
+## Chapter 1: The Setup {.section}
+
+## A Single Panel {.panel}
+
+## {.action}
+
+POW!
+
+## Hero says... {.speech}
+
+With great Quarto comes great responsibility.
+```
+
+A heading with no class is an ordinary slide.
+An `.action` or `.explosion` slide usually has no heading text at all, since the body is the display text.
+
+A `.section` heading written `Banner: Title` splits at the colon, putting the first part in a banner chip above the second.
+
+## Bubbles inside a panel
+
+```markdown
+## Bubbles inside a panel {.panel}
+
+::: {.speech}
+Use me when a character speaks mid-panel.
+:::
+
+::: {.thought}
+If the signal repeats every 11 minutes, the next pulse is in 3.
+:::
+
+::: {.shout}
+Stop right there!
+:::
+
+::: {.whisper}
+Until next time.
+:::
+
+::: {.narration}
+Three minutes later, the city is quiet again.
+:::
+```
+
+The body of each is ordinary markdown.
+
+## Fragment entrances
+
+```markdown
+- [Locate the source of the broadcast.]{.fragment .comic-pop}
+- [Wipe in behind halftone.]{.fragment .halftone-wipe}
+- [Splat in like wet ink.]{.fragment .ink-splat}
+- [Flash a highlight across the text.]{.fragment .zap-highlight}
+```
+
+Each pairs `.fragment` with one entrance class.
+A bubble takes them too, so a whole bubble arrives at once:
+
+```markdown
+::: {.shout .fragment fragment-index="2"}
+Stop right there!
+:::
+```
+
+## Stamping a callout on a slide
+
+```markdown
+## The Confrontation {.panel}
+
+{{{< bam >}}}
+
+{{{< boom "KAPOW!" colour=blue top=12% right=8% rotate=-15 >}}}
+```
+
+The first takes every default: the text `BAM!`, in yellow, sitting in the flow of the slide.
+
+Give any one of `top`, `right`, `bottom` or `left` and the callout floats over the slide instead, which is how you place one in a corner over other content.
+
+```markdown
+{{{< bam "ZAP!" colour=blue bottom=10% left=8% rotate=12 fragment=pop index=3 >}}}
+```
+
+`fragment` reveals the callout with a comic entrance rather than showing it from the start, and `index` places it in the slide's fragment order.
+
+## Captioning a slide
+
+```markdown
+## The Confrontation {.panel}
+
+Content that fills the panel.
+
+::: {.caption}
+Meanwhile, at the observatory.
+:::
+```
+
+The caption is pinned to the slide corner and keeps its own size while the rest of the slide is scaled to fit.
+
+## Composing
+
+```markdown
+## Halftone, composed {.panel .halftone}
+```
+
+`.halftone` is a modifier, so it sits alongside any slide class rather than replacing it.
+
+## Source
+
+The repository ships a complete starting point you can copy: [`template.qmd`](https://github.com/mcanouil/quarto-revealjs-comic/blob/main/template.qmd).

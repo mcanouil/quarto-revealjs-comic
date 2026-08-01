@@ -2,3 +2,5 @@
 /.luarc.json
 /template_files/
 /index.html
+/.quarto/
+**/*.quarto_ipynb
