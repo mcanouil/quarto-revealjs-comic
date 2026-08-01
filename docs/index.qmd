@@ -15,6 +15,8 @@ Each is a class on a heading or a div, so the source stays markdown and only the
 
 [See a deck built by this site](preview.html).
 
+![](preview.html){.embed-art loading="lazy" title="A deck in the comic format" style="--atelier-embed-art-ratio: 1.78;"}
+
 ## Starting a presentation
 
 ```bash
