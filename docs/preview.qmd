@@ -1,0 +1,60 @@
+---
+title: "The Comic Format"
+subtitle: "Slides as a super-hero comic"
+author: "Mickaël CANOUIL"
+date: last-modified
+format: comic-revealjs
+---
+
+## Chapter 1: The Setup {.section}
+
+A section splash, with a starburst behind it.
+
+## A Single Panel {.panel}
+
+Paper background, bold ink border, and a drop shadow: one comic panel.
+
+## {.action}
+
+POW!
+
+## Hero says... {.speech}
+
+With great Quarto comes great responsibility.
+
+## Bubbles inside a panel {.panel}
+
+::: {.speech}
+Use me when a character speaks mid-panel.
+:::
+
+::: {.thought}
+If the signal repeats every 11 minutes, the next pulse is in 3.
+:::
+
+::: {.shout}
+Stop right there!
+:::
+
+::: {.whisper}
+Until next time.
+:::
+
+::: {.narration}
+Three minutes later, the city is quiet again.
+:::
+
+## Fragment entrances {.panel}
+
+- [Locate the source of the broadcast.]{.fragment .comic-pop}
+- [Wipe in behind halftone.]{.fragment .halftone-wipe}
+- [Splat in like wet ink.]{.fragment .ink-splat}
+- [Flash a highlight across the text.]{.fragment .zap-highlight}
+
+## Halftone, composed {.panel .halftone}
+
+`.halftone` is a modifier, so it combines with any other class.
+
+## {.explosion}
+
+THE END
