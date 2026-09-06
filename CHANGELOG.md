@@ -4,7 +4,7 @@
 
 ### New Features
 
-- feat: Check each `bam` and `boom` shortcode call against the extension schema and report what it does not accept.
+- feat: Check each `bam` and `boom` shortcode call against the extension schema and report what it does not accept. (#35)
 
 ## 1.0.1 (2026-08-01)
 
