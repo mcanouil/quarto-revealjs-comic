@@ -15,7 +15,7 @@
      "The Setup").
 ]]
 
-local helpers = require(quarto.utils.resolve_path("_modules/pandoc-helpers.lua"):gsub("%.lua$", ""))
+local helpers = require(quarto.utils.resolve_path("_vendor/quarto-lua-modules/pandoc-helpers.lua"):gsub("%.lua$", ""))
 
 local bubble_classes = {
   speech    = "speech-bubble",
