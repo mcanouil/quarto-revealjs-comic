@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### New Features
+
+- feat: Check each `bam` and `boom` shortcode call against the extension schema and report what it does not accept.
+
 ## 1.0.1 (2026-08-01)
 
 ### Documentation
