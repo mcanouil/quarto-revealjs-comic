@@ -29,7 +29,7 @@
   as a jagged spike-burst with the text clipped inside the star polygon.
 ]]
 
-local str = require(quarto.utils.resolve_path("_modules/string.lua"):gsub("%.lua$", ""))
+local str = require(quarto.utils.resolve_path("_vendor/quarto-lua-modules/string.lua"):gsub("%.lua$", ""))
 local callout = require(quarto.utils.resolve_path("_modules/callout.lua"):gsub("%.lua$", ""))
 
 return {

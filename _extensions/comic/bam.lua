@@ -29,7 +29,7 @@
   renders as a skewed, ink-outlined comic burst.
 ]]
 
-local str = require(quarto.utils.resolve_path("_modules/string.lua"):gsub("%.lua$", ""))
+local str = require(quarto.utils.resolve_path("_vendor/quarto-lua-modules/string.lua"):gsub("%.lua$", ""))
 local callout = require(quarto.utils.resolve_path("_modules/callout.lua"):gsub("%.lua$", ""))
 
 return {
