@@ -20,9 +20,15 @@ website:
   title: "RevealJS Comic"
   description: "A RevealJS format for Quarto that styles slides as a super-hero comic: splash pages, panels, speech bubbles, and halftone."
   # No trailing slash: Quarto builds the social image URL by concatenating this
-  # with a leading-slash image path, without normalising.
+  # with the image path, without normalising.
   site-url: &site-url https://m.canouil.dev/quarto-revealjs-comic
   repo-url: https://github.com/mcanouil/quarto-revealjs-comic
+  open-graph:
+    image: assets/social/og-image.png
+    image-alt: "The quarto-revealjs-comic social card: the extension name and the \"format\" badge over the line \"Style Reveal.js slides as a comic book\", beside a dark code window showing slides.qmd."
+  twitter-card:
+    image: assets/social/og-image.png
+    image-alt: "The quarto-revealjs-comic social card: the extension name and the \"format\" badge over the line \"Style Reveal.js slides as a comic book\", beside a dark code window showing slides.qmd."
   repo-subdir: docs
   page-navigation: true
   # atelier defaults search to an overlay button in the navbar. With no navbar
