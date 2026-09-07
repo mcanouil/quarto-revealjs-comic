@@ -61,7 +61,7 @@ return {
     checker:call("bam", args, kwargs)
 
     if not quarto.doc.is_format("revealjs") then
-      return nil
+      return pandoc.Null()
     end
     local text = "BAM!"
     if args and args[1] then
