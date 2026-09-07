@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.1.1 (2026-09-07)
+
 ### Bug Fixes
 
 - fix: The `bam` and `boom` shortcodes no longer stop the render in a document that is not a Reveal.js deck. They produce nothing in that case. (#40)
