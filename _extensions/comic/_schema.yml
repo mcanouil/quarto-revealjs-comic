@@ -50,8 +50,8 @@ shortcodes:
           type: freeform
           placeholder: "3em"
       fragment:
-        type: [string, boolean]
-        enum: [true, burst, pop, splat, false, "off", "no", 0]
+        type: string
+        enum: ["true", burst, pop, splat, "false", "off", "no", "0"]
         description: "Reveal the callout as a Reveal.js fragment with the matching comic entrance; true maps to burst, and false/off/no/0 disable it."
       index:
         type: integer
@@ -105,8 +105,8 @@ shortcodes:
           type: freeform
           placeholder: "3em"
       fragment:
-        type: [string, boolean]
-        enum: [true, burst, pop, splat, false, "off", "no", 0]
+        type: string
+        enum: ["true", burst, pop, splat, "false", "off", "no", "0"]
         description: "Reveal the callout as a Reveal.js fragment with the matching comic entrance; true maps to burst, and false/off/no/0 disable it."
       index:
         type: integer
