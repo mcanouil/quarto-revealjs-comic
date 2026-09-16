@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+- fix: Quote the fragment enum values that collide with the shortcode's own string/boolean type union, so true, false and 0 no longer report as invalid. (#45)
+
 ### Documentation
 
 - docs: Serve the extension's social card as the Open Graph image, so a shared link shows the card rather than the first image on the page. (#42)
