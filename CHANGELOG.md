@@ -5,6 +5,7 @@
 ### Bug Fixes
 
 - fix: Quote the fragment enum values that collide with the shortcode's own string/boolean type union, so true, false and 0 no longer report as invalid. (#45)
+- fix: Report a key nested inside an option as a warning rather than an error, so one nested typo does not invalidate the whole configuration. This matches how the extension already reports an unknown key at the top of its own block. (#45)
 
 ### Documentation
 
@@ -14,7 +15,7 @@
 
 - build: Update the vendored Lua modules to 2.3.0, which includes the `schema-check` fix for an extension whose entry points are in a subdirectory. A module no longer carries a version line in its header, so its checksum changes only when its code changes. (#43)
 - build: Fetch the schema validator from a Quarto Wizard release asset rather than a raw path inside its repository, which a refactor could move without notice. The vendored file is unchanged. (#44)
-- build: Update the vendored Lua modules to 2.5.0, which adds the accessors that read what the schema resolves an option, an element's attributes and a format's options to. The schema validator moves to its own release train and is pinned at `schema-v2.1.0`, which accepts only `true` and `false` as a boolean. (#45)
+- build: Update the vendored Lua modules to 2.5.0, which adds the accessors that read what the schema resolves an option, an element's attributes and a format's options to. The schema validator moves to its own release train and is pinned at `schema-v2.2.0`, which accepts only `true` and `false` as a boolean. (#45)
 
 ## 1.1.1 (2026-09-07)
 
