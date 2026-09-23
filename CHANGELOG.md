@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.1.2 (2026-09-23)
+
 ### Bug Fixes
 
 - fix: Quote the fragment enum values that collide with the shortcode's own string/boolean type union, so true, false and 0 no longer report as invalid. (#45)
