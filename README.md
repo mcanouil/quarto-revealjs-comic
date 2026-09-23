@@ -7,13 +7,13 @@ Authors opt into distinct visuals (cover splash, section splash, single panel, a
 ## Creating a New Presentation
 
 ```bash
-quarto use template mcanouil/quarto-revealjs-comic@1.1.1
+quarto use template mcanouil/quarto-revealjs-comic@1.1.2
 ```
 
 ## Installation For Existing Presentation
 
 ```bash
-quarto add mcanouil/quarto-revealjs-comic@1.1.1
+quarto add mcanouil/quarto-revealjs-comic@1.1.2
 ```
 
 This will install the extension under the `_extensions` subdirectory.
