@@ -162,11 +162,11 @@ A `.thought` bubble div.
 
 ZAP!
 
-{{< bam "POW!" colour=red top=35% right=8% rotate=12 size=2.6em fragment=burst index=1 >}}
+{{< bam "POW!" colour=red top="35%" right="8%" rotate=12 size="2.6em" fragment=burst index=1 >}}
 
-{{< bam "WHAM!" colour=blue top=58% left=10% rotate=-8 size=2em fragment=pop index=2 >}}
+{{< bam "WHAM!" colour=blue top="58%" left="10%" rotate=-8 size="2em" fragment=pop index=2 >}}
 
-{{< bam "THWACK!" colour=yellow bottom=12% left=14% rotate=6 size=1.8em fragment=splat index=3 >}}
+{{< bam "THWACK!" colour=yellow bottom="12%" left="14%" rotate=6 size="1.8em" fragment=splat index=3 >}}
 
 ## "Stop right there!"
 
@@ -204,11 +204,11 @@ The signal pulses one more time.
 
 KA-BOOM!
 
-{{< boom "BLAM!" colour=yellow top=62% left=8% rotate=-14 size=1.6em >}}
+{{< boom "BLAM!" colour=yellow top="62%" left="8%" rotate=-14 size="1.6em" >}}
 
-{{< boom "KRAK!" colour=red top=28% right=12% rotate=10 size=1.5em fragment=burst index=1 >}}
+{{< boom "KRAK!" colour=red top="28%" right="12%" rotate=10 size="1.5em" fragment=burst index=1 >}}
 
-{{< boom "ZRT!" colour=blue bottom=18% right=20% rotate=-6 size=1.2em fragment=pop index=2 >}}
+{{< boom "ZRT!" colour=blue bottom="18%" right="20%" rotate=-6 size="1.2em" fragment=pop index=2 >}}
 
 ## Aftermath {.panel}
 
