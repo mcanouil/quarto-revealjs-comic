@@ -69,7 +69,7 @@ Each emits a `<div>`, and each renders nothing outside RevealJS.
 
 ```markdown
 {{{< bam >}}}
-{{{< boom "KAPOW!" colour=blue top=10% right=8% rotate=-15 >}}}
+{{{< boom "KAPOW!" colour=blue top="10%" right="8%" rotate=-15 >}}}
 ```
 
 | Shortcode | First argument | Default colour | Shape |

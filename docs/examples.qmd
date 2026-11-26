@@ -81,7 +81,7 @@ Stop right there!
 
 {{{< bam >}}}
 
-{{{< boom "KAPOW!" colour=blue top=12% right=8% rotate=-15 >}}}
+{{{< boom "KAPOW!" colour=blue top="12%" right="8%" rotate=-15 >}}}
 ```
 
 The first takes every default: the text `BAM!`, in yellow, sitting in the flow of the slide.
@@ -89,7 +89,7 @@ The first takes every default: the text `BAM!`, in yellow, sitting in the flow o
 Give any one of `top`, `right`, `bottom` or `left` and the callout floats over the slide instead, which is how you place one in a corner over other content.
 
 ```markdown
-{{{< bam "ZAP!" colour=blue bottom=10% left=8% rotate=12 fragment=pop index=3 >}}}
+{{{< bam "ZAP!" colour=blue bottom="10%" left="8%" rotate=12 fragment=pop index=3 >}}}
 ```
 
 `fragment` reveals the callout with a comic entrance rather than showing it from the start, and `index` places it in the slide's fragment order.
